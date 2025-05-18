@@ -1,5 +1,12 @@
 {
     "files.associations": {
         "iostream": "cpp"
-    }
+    },
+    "clangd.path": "clangd", // 使用系统 clangd（建议版本 ≥12.0.0）
+    "clangd.arguments": [
+        "--background-index", // 后台索引
+        "--compile-commands-dir=${workspaceFolder}", // 指定 compile_commands.json 所在目录
+        "--completion-style=detailed", // 详细补全提示
+        "--header-insertion=never" // 禁用自动插入头文件
+    ]
 }

@@ -1,4 +1,9 @@
+# Build
 /bazel-*
 /output
 /build
 /MODULE.bazel.lock
+
+# Clangd
+/.clangd
+/.cache
