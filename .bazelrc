@@ -8,6 +8,9 @@ build --show_timestamps
 build --cxxopt="-fdiagnostics-color=always"
 build --copt="-Werror=return-type"
 
+# Print all build command
+# build --subcommands
+
 build:dbg --compilation_mode=dbg
 
 build:opt --compilation_mode=opt

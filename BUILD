@@ -1,6 +1,4 @@
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
-
-# For clangd
+load("@com_github_google_rules_install//installer:def.bzl", "installer")
 load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
 
 alias(
@@ -10,11 +8,12 @@ alias(
 )
 
 alias(
-    name = "install",
-    actual = "//src:install",
+    name = "common_math",
+    actual = "//src/common/math:common_math",
     visibility = ["//visibility:public"],
 )
 
+# Target to generate and refresh compile_commands.json.
 refresh_compile_commands(
     name = "refresh_compile_commands",
 
@@ -36,19 +35,11 @@ refresh_compile_commands(
     # And if you're working on a header-only library, specify a test or binary target that compiles it.
 )
 
-# # project/BUILD
-
-# pkg_tar(
-#     name = "release_libs",
-#     package_dir = "lib",
-#     srcs = [
-#         "//src:main",
-#     ],
-# )
-
-# pkg_tar(
-#     name = "release",
-#     deps = [
-#         ":release_libs",
-#     ],
-# )
+# Target for copy build artifacts to a directory.
+installer(
+    name = "install",
+    data = [
+        "//src:main",
+        "//src/common/math:common_math",
+    ],
+)

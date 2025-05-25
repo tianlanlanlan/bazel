@@ -1,13 +1,41 @@
 #!/bin/sh
-set -ex
+set -e
+# set -x
 
-rm -rf output
+readonly install_dir="$(pwd)/output"
 
-bazel build --config=asan --subcommands main
+clean() {
+    rm -rf $install_dir
+}
 
-declare -r tmpdir="$(pwd)/output"
-bazel run --config=asan //src:install_main -- "${tmpdir}"
+build() {
+    bazel build --config=asan main
+    bazel build --config=asan common_math
+}
 
-bazel run refresh_compile_commands
+test() {
+    bazel test --cxxopt=-std=c++17 --test_output=all //src/common/math:vec2d_test
+}
 
+install() {
+    bazel run --config=asan install -- $install_dir
+}
+
+refresh() {
+    bazel run refresh_compile_commands >/dev/null 2>&1 || printf $(
+        tput setaf 1
+        tput bold
+    )'Refresh compile commands failed\n'$(tput sgr0)
+}
+
+clean
+build
+test
+install
+refresh
 # bazel shutdown
+
+printf $(
+    tput setaf 2
+    tput bold
+)'Build success!\n'$(tput sgr0)

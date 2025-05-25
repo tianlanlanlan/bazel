@@ -2,11 +2,33 @@
     "files.associations": {
         "iostream": "cpp"
     },
-    "clangd.path": "clangd", // 使用系统 clangd（建议版本 ≥12.0.0）
+    // 是否检查插件冲突
+    "clangd.detectExtensionConflicts": true,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.path": "/usr/bin/clangd-18",
+    // 查找的头文件路径，每一项前缀 -I
+    "clangd.fallbackFlags": [],
     "clangd.arguments": [
-        "--background-index", // 后台索引
-        "--compile-commands-dir=${workspaceFolder}", // 指定 compile_commands.json 所在目录
-        "--completion-style=detailed", // 详细补全提示
-        "--header-insertion=never" // 禁用自动插入头文件
+        // 在后台自动分析文件（基于complie_commands)
+        "--background-index",
+        // 标记compelie_commands.json文件的目录位置
+        "--compile-commands-dir=${workspaceFolder}",
+        // 同时开启的任务数量
+        "-j=12",
+        // 全局补全（会自动补充头文件）
+        "--all-scopes-completion",
+        // 更详细的补全内容
+        "--completion-style=detailed",
+        // Include what you use
+        "--header-insertion=iwyu",
+        // pch优化的位置 disk memory
+        "--pch-storage=memory",
+        "--cross-file-rename",
+        "--enable-config",
+        // clang-format style to apply by default when no .clang-format file is found
+        "--fallback-style=WebKit",
+        "--pretty",
+        "--clang-tidy",
+        "--query-driver=clang++",
     ]
 }

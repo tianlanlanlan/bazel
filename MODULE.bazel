@@ -7,8 +7,13 @@
 
 bazel_dep(name = "rules_cuda", version = "0.2.5")
 
+# Choose the most recent version available at
+# https://registry.bazel.build/modules/googletest
+bazel_dep(name = "googletest", version = "1.17.0")
+
 # Hedron's Compile Commands Extractor for Bazel
 # https://github.com/hedronvision/bazel-compile-commands-extractor
+# commit: 4f28899228fb3ad0126897876f147ca15026151e
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 local_path_override(
     module_name = "hedron_compile_commands",
@@ -16,6 +21,8 @@ local_path_override(
 )
 
 # For install build artifacts
+# https://github.com/google/bazel_rules_install.git
+# commit: 6001facc1a96bafed0e414a529b11c1819f0cdbe
 bazel_dep(name = "com_github_google_rules_install")
 local_path_override(
     module_name = "com_github_google_rules_install",

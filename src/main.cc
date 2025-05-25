@@ -1,6 +1,6 @@
 #include <iostream>
 
-bool foo() {
+bool test_asan_issues() {
   // Test memory leak and out-of-bounds write
   int *ptr = (int *)malloc(sizeof(int) * 100);
   (void)ptr; // Suppress unused variable warning
@@ -14,7 +14,8 @@ bool foo() {
 
 int main() {
   std::cout << "main" << std::endl;
-  std::cout << "hello" << std::endl;
-  foo();
+
+  test_asan_issues();
+
   return 0;
 }
