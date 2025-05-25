@@ -1,4 +1,5 @@
-load("//rules:local-deploy.bzl", "local_deploy")  # <1>
+load("@com_github_google_rules_install//installer:def.bzl", "installer")
+
 package(default_visibility = ["//visibility:public"])
 
 cc_binary(
@@ -6,8 +7,7 @@ cc_binary(
     srcs = ["main.cc"],
 )
 
-local_deploy(
-    name = "install",  # <2>
-    srcs = [":main"],  # <3>
-    install_dir = "/home/tianlan/bazel/output",  # <4>
+installer(
+    name = "install_main",
+    data = [":main"],
 )

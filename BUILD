@@ -1,3 +1,5 @@
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+
 # For clangd
 load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
 
@@ -33,3 +35,20 @@ refresh_compile_commands(
     # As are additional targets (+) and subtractions (-), like in bazel query https://docs.bazel.build/versions/main/query.html#expressions
     # And if you're working on a header-only library, specify a test or binary target that compiles it.
 )
+
+# # project/BUILD
+
+# pkg_tar(
+#     name = "release_libs",
+#     package_dir = "lib",
+#     srcs = [
+#         "//src:main",
+#     ],
+# )
+
+# pkg_tar(
+#     name = "release",
+#     deps = [
+#         ":release_libs",
+#     ],
+# )

@@ -1,0 +1,14 @@
+g++ src/main.cc -o main -fsanitize=address -g \
+    -fuse-ld=gold \
+    -B/usr/bin \
+    -Wl,-no-as-needed \
+    -Wl,-z,relro,-z,now \
+    -pass-exit-codes \
+    -fsanitize=address \
+    -lasan \
+    -Wl,--push-state,-as-needed \
+    -lstdc++ \
+    -Wl,--pop-state \
+    -Wl,--push-state,-as-needed \
+    -lm \
+    -Wl,--pop-state
