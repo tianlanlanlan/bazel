@@ -43,3 +43,5 @@ installer(
         "//src/common/math:common_math",
     ],
 )
+
+# Bazel cross compile thanks to doc: https://ltekieli.github.io/cross-compiling-with-bazel/
