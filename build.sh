@@ -22,7 +22,7 @@ install() {
 }
 
 refresh() {
-    bazel run refresh_compile_commands >/dev/null 2>&1 || printf $(
+    bazel run refresh_compile_commands || printf $(
         tput setaf 1
         tput bold
     )'Refresh compile commands failed\n'$(tput sgr0)
