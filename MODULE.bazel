@@ -26,5 +26,5 @@ local_path_override(
 bazel_dep(name = "com_github_google_rules_install")
 local_path_override(
     module_name = "com_github_google_rules_install",
-    path = "rules/bazel_rules_install",
+    path = "rules/bazel_install_rules",
 )
