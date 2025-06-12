@@ -6,6 +6,7 @@
 ###############################################################################
 
 bazel_dep(name = "rules_cuda", version = "0.2.5")
+bazel_dep(name = "spdlog", version = "1.15.2")
 
 # Choose the most recent version available at
 # https://registry.bazel.build/modules/googletest
