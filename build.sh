@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 # set -x
 
+readonly current_script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 readonly install_dir="$(pwd)/output"
 
 clean() {
@@ -9,8 +10,8 @@ clean() {
 }
 
 build() {
-    bazel build --config=asan main
-    bazel build --config=asan common_math
+    bazel build $build_config main
+    bazel build $build_config common_math
 }
 
 test() {
@@ -18,7 +19,7 @@ test() {
 }
 
 install() {
-    bazel run --config=asan install -- $install_dir
+    bazel run $build_config install -- $install_dir
 }
 
 refresh() {
@@ -28,12 +29,53 @@ refresh() {
     )'Refresh compile commands failed\n'$(tput sgr0)
 }
 
-clean
-build
-test
-install
-refresh
-# bazel shutdown
+cmake_build() {
+    rm -rf $current_script_dir/output $current_script_dir/build
+    cmake -S $current_script_dir/cmake -B $current_script_dir/build \
+        -G Ninja \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_CXX_FLAGS=-fdiagnostics-color=always \
+        -DCMAKE_INSTALL_PREFIX=output \
+        -DCMAKE_TOOLCHAIN_FILE=rpi3-toolchain.cmake
+    # -DENABLE_ASAN=ON
+    ninja -C build -j 8
+    ninja -C build install
+}
+
+bazel_build() {
+    clean
+    build
+    # test
+    install
+    refresh
+    # bazel shutdown
+}
+
+case $1 in
+clean)
+    clean
+    bazel clean --expunge
+    ;;
+rpi)
+    build_config=(
+        --platforms=//:rpi
+        # --config asan
+    )
+    bazel_build
+    ;;
+x86)
+    build_config=(
+        # --config asan
+    )
+    bazel_build
+    ;;
+*)
+    build_config=(
+        # --config asan
+    )
+    bazel_build
+    ;;
+esac
 
 printf $(
     tput setaf 2

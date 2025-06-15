@@ -46,3 +46,10 @@ installer(
 )
 
 # Bazel cross compile thanks to doc: https://ltekieli.github.io/cross-compiling-with-bazel/
+platform(
+    name = "rpi",
+    constraint_values = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+)

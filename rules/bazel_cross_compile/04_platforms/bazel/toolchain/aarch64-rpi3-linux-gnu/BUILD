@@ -35,14 +35,6 @@ cc_toolchain(
     strip_files = ":empty",
 )
 
-cc_toolchain_suite(
-    name = "gcc_toolchain",
-    toolchains = {
-        "aarch64": ":aarch64_toolchain",
-    },
-    tags = ["manual"]
-)
-
 toolchain(
     name = "aarch64_linux_toolchain",
     exec_compatible_with = [

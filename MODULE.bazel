@@ -5,7 +5,7 @@
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
 
-bazel_dep(name = "rules_cuda", version = "0.2.5")
+# bazel_dep(name = "rules_cuda", version = "0.2.5")
 bazel_dep(name = "spdlog", version = "1.15.2")
 
 # Choose the most recent version available at
@@ -28,4 +28,11 @@ bazel_dep(name = "com_github_google_rules_install")
 local_path_override(
     module_name = "com_github_google_rules_install",
     path = "rules/bazel_install_rules",
+)
+
+# Add appropriate dependencies and register the toolchain
+# This step defines a cc_toolchain and binds it to a toolchain target for the host configuration
+bazel_dep(name = "platforms", version = "0.0.11")
+register_toolchains(
+    "//toolchain:cc_toolchain_for_linux_aarch64_rpi3",
 )
