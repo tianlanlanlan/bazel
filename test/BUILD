@@ -8,3 +8,17 @@ cc_test(
         "@spdlog",
     ],
 )
+
+genrule(
+    name = "gen_log",
+    outs = [
+        "log.h",
+        "log.cc",
+    ],
+    cmd = """
+        bash $(location gen_log.sh) \
+            --header $(location log.h) \
+            --source $(location log.cc)
+    """,
+    tools = ["gen_log.sh"],
+)

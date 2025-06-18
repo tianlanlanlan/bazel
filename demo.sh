@@ -44,5 +44,31 @@ test_log() {
     done
 }
 
-bazel build main --platforms=:rpi
-bazel run --platforms=:rpi install -- "$(pwd)/output"
+cross_build() {
+    bazel build main --platforms=:rpi
+    bazel run --platforms=:rpi install -- "$(pwd)/output"
+}
+
+gen_log() {
+    #!/bin/bash
+    set -euo pipefail
+
+    # 获取项目根目录
+    PROJECT_ROOT=$(dirname "$(readlink -f "$0")")
+
+    # 构建日志生成目标
+    echo "构建日志生成目标..."
+    bazel build //test:gen_log
+
+    # 获取Bazel输出目录
+    BAZEL_BIN=$(bazel info bazel-bin)
+
+    # 拷贝生成的文件到项目根目录
+    src_dir="${BAZEL_BIN}/test"
+    dst_dir="${PROJECT_ROOT}/test"
+    cp -f "${src_dir}/log.h" "${dst_dir}/log.h"
+    cp -f "${src_dir}/log.cc" "${dst_dir}/log.cc"
+
+}
+
+gen_log
