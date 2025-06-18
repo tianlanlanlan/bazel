@@ -3,6 +3,7 @@
 /output
 /build
 /MODULE.bazel.lock
+!/bazel-complete.bash
 
 # Clangd
 /.clangd

@@ -15,7 +15,8 @@ build() {
 }
 
 test() {
-    bazel test --cxxopt=-std=c++17 --test_output=all //src/common/math:vec2d_test
+    bazel test $build_config --test_output=all //src/common/math:vec2d_test
+    bazel test $build_config --test_output=all //test/...
 }
 
 install() {
@@ -45,7 +46,7 @@ cmake_build() {
 bazel_build() {
     clean
     build
-    # test
+    test
     install
     refresh
     # bazel shutdown
