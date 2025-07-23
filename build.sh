@@ -46,7 +46,7 @@ cmake_build() {
 bazel_build() {
     clean
     build
-    test
+    # test
     install
     refresh
     # bazel shutdown

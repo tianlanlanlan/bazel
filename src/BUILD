@@ -150,6 +150,7 @@ cc_shared_library(
 cc_binary(
     name = "main",
     srcs = ["main.cc"],
+    linkopts = ["-ldl"],
 )
 
 cc_binary(
