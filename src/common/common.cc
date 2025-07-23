@@ -8,6 +8,10 @@ void common(void) {
   status.set_id(12345);
   status.set_email("123@.com");
   std::cout << "Debug: " << status.DebugString();
+  std::cout << "Debug: " << status.DebugString();
+  std::cout << "Debug: " << status.DebugString();
+  std::cout << "Debug: " << status.DebugString();
+  std::cout << "Debug: " << status.DebugString();
 
   // PerfInfo proto;
 }

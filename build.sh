@@ -11,7 +11,8 @@ clean() {
 
 build() {
     bazel build $build_config main
-    bazel build $build_config common_math
+    bazel build $build_config common
+    bazel build $build_config //src:node
 }
 
 test() {
@@ -28,6 +29,17 @@ refresh() {
         tput setaf 1
         tput bold
     )'Refresh compile commands failed\n'$(tput sgr0)
+}
+
+
+format_bazel() {
+    find src -type f \( \
+        -name "BUILD" \
+        -o -name "*.bzl" \
+        -o -name "WORKSPACE" \
+        -o -name "BUILD.bazel" \
+        -o -name "*.BUILD" \
+    \) -exec "buildifier-linux-amd64" {} \;
 }
 
 cmake_build() {
@@ -49,6 +61,7 @@ bazel_build() {
     # test
     install
     refresh
+    format_bazel
     # bazel shutdown
 }
 
@@ -83,15 +96,3 @@ printf $(
     tput bold
 )'Build success!\n'$(tput sgr0)
 
-
-format_bazel() {
-    find src -type f \( \
-        -name "BUILD" \
-        -o -name "*.bzl" \
-        -o -name "WORKSPACE" \
-        -o -name "BUILD.bazel" \
-        -o -name "*.BUILD" \
-    \) -exec "buildifier-linux-amd64" {} \;
-}
-
-format_bazel

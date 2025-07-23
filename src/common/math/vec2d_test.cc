@@ -35,6 +35,7 @@ TEST(Vec2dTest, NomralCases) {
   EXPECT_NEAR(pt.Angle(), std::atan2(3, 2), 1e-5);
   EXPECT_NEAR(pt.CrossProd({4, 5}), -2, 1e-5);
   EXPECT_NEAR(pt.InnerProd({4, 5}), 23, 1e-5);
+  EXPECT_EQ(pt.DebugString(), "vec2d ( x = 2  y = 3 )");
   pt.set_x(4);
   pt.set_y(5);
   EXPECT_NEAR(pt.Length(), std::sqrt(41.0), 1e-5);

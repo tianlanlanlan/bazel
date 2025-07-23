@@ -8,8 +8,8 @@ alias(
 )
 
 alias(
-    name = "common_math",
-    actual = "//src/common/math:common_math",
+    name = "common",
+    actual = "//src:common",
     visibility = ["//visibility:public"],
 )
 
@@ -41,7 +41,7 @@ installer(
     name = "install",
     data = [
         "//src:main",
-        "//src/common/math:common_math",
+        "//src/common/math",
     ],
 )
 
