@@ -20,8 +20,8 @@
 #include <cmath>
 #include <utility>
 
-#include "absl/strings/str_cat.h"
 #include "common/log/log.h"
+#include "fmt/format.h"
 
 #include "common/math/math_utils.h"
 
@@ -37,7 +37,7 @@ bool IsWithin(double val, double bound1, double bound2) {
   return val >= bound1 - kMathEpsilon && val <= bound2 + kMathEpsilon;
 }
 
-}  // namespace
+} // namespace
 
 LineSegment2d::LineSegment2d() { unit_direction_ = Vec2d(1, 0); }
 
@@ -220,10 +220,12 @@ double LineSegment2d::GetPerpendicularFoot(const Vec2d &point,
 }
 
 std::string LineSegment2d::DebugString() const {
-  return absl::StrCat("segment2d ( start = ", start_.DebugString(),
-                      "  end = ", end_.DebugString(), " )");
+  return fmt::format("LineSegment2d ( start = {}, end = {}, length = {:.3f}, "
+                     "heading = {:.3f} )",
+                     start_.DebugString(), end_.DebugString(), length_,
+                     heading_);
 }
 
-}  // namespace math
-}  // namespace common
-}  // namespace apollo
+} // namespace math
+} // namespace common
+} // namespace apollo

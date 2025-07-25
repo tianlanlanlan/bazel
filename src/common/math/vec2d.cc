@@ -16,11 +16,9 @@
 
 #include "common/math/vec2d.h"
 
-#include <cmath>
-
-#include "absl/strings/str_cat.h"
-
 #include "common/log/log.h"
+#include "fmt/format.h"
+#include <cmath>
 
 namespace apollo {
 namespace common {
@@ -123,7 +121,7 @@ bool Vec2d::operator==(const Vec2d &other) const {
 Vec2d operator*(const double ratio, const Vec2d &vec) { return vec * ratio; }
 
 std::string Vec2d::DebugString() const {
-  return absl::StrCat("vec2d ( x = ", x_, "  y = ", y_, " )");
+  return fmt::format("Vec2d ( x = {:.6f}  y = {:.6f} )", x_, y_);
 }
 
 } // namespace math

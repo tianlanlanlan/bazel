@@ -31,15 +31,21 @@ refresh() {
     )'Refresh compile commands failed\n'$(tput sgr0)
 }
 
-
 format_bazel() {
+    [ $(command -v buildifier-linux-amd64) ] || {
+        printf $(
+            tput setaf 3
+            tput bold
+        )'buildifier-linux-amd64 not found, please install it first\n'$(tput sgr0)
+        return
+    }
     find src -type f \( \
         -name "BUILD" \
         -o -name "*.bzl" \
         -o -name "WORKSPACE" \
         -o -name "BUILD.bazel" \
         -o -name "*.BUILD" \
-    \) -exec "buildifier-linux-amd64" {} \;
+        \) -exec "buildifier-linux-amd64" {} \;
 }
 
 cmake_build() {
@@ -95,4 +101,3 @@ printf $(
     tput setaf 2
     tput bold
 )'Build success!\n'$(tput sgr0)
-

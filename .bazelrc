@@ -1,8 +1,5 @@
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 
-# TODO: ErrorProne's SelfAssertions are violated in protobuf's test
-build --javacopt=-Xep:SelfAssertion:WARN
-
 build --show_timestamps
 # Enable colorful output of GCC
 build --cxxopt="-fdiagnostics-color=always"
@@ -51,7 +48,5 @@ common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
 
 common --enable_platform_specific_config
 
-# Use clang-cl by default on Windows (see https://github.com/protocolbuffers/protobuf/issues/20085).
-build:windows --extra_toolchains=@local_config_cc//:cc-toolchain-x64_windows-clang-cl --extra_execution_platforms=//build_defs:x64_windows-clang-cl --host_platform=//build_defs:x64_windows-clang-cl
 build --subcommands
 # build --sandbox_debug

@@ -16,11 +16,10 @@
 
 #include "common/math/box2d.h"
 
+#include "fmt/format.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
-
-#include "absl/strings/str_cat.h"
 
 #include "common/log/log.h"
 #include "common/math/math_utils.h"
@@ -48,18 +47,13 @@ double PtSegDistance(double query_x, double query_y, double start_x,
   return std::abs(x0 * dy - y0 * dx) / length;
 }
 
-}  // namespace
+} // namespace
 
 Box2d::Box2d(const Vec2d &center, const double heading, const double length,
              const double width)
-    : center_(center),
-      length_(length),
-      width_(width),
-      half_length_(length / 2.0),
-      half_width_(width / 2.0),
-      heading_(heading),
-      cos_heading_(cos(heading)),
-      sin_heading_(sin(heading)) {
+    : center_(center), length_(length), width_(width),
+      half_length_(length / 2.0), half_width_(width / 2.0), heading_(heading),
+      cos_heading_(cos(heading)), sin_heading_(sin(heading)) {
   CHECK_GT(length_, -kMathEpsilon);
   CHECK_GT(width_, -kMathEpsilon);
   InitCorners();
@@ -67,13 +61,9 @@ Box2d::Box2d(const Vec2d &center, const double heading, const double length,
 
 Box2d::Box2d(const Vec2d &point, double heading, double front_length,
              double back_length, double width)
-    : length_(front_length + back_length),
-      width_(width),
-      half_length_(length_ / 2.0),
-      half_width_(width / 2.0),
-      heading_(heading),
-      cos_heading_(cos(heading)),
-      sin_heading_(sin(heading)) {
+    : length_(front_length + back_length), width_(width),
+      half_length_(length_ / 2.0), half_width_(width / 2.0), heading_(heading),
+      cos_heading_(cos(heading)), sin_heading_(sin(heading)) {
   CHECK_GT(length_, -kMathEpsilon);
   CHECK_GT(width_, -kMathEpsilon);
   double delta_length = (front_length - back_length) / 2.0;
@@ -83,13 +73,9 @@ Box2d::Box2d(const Vec2d &point, double heading, double front_length,
 }
 
 Box2d::Box2d(const LineSegment2d &axis, const double width)
-    : center_(axis.center()),
-      length_(axis.length()),
-      width_(width),
-      half_length_(axis.length() / 2.0),
-      half_width_(width / 2.0),
-      heading_(axis.heading()),
-      cos_heading_(axis.cos_heading()),
+    : center_(axis.center()), length_(axis.length()), width_(width),
+      half_length_(axis.length() / 2.0), half_width_(width / 2.0),
+      heading_(axis.heading()), cos_heading_(axis.cos_heading()),
       sin_heading_(axis.sin_heading()) {
   CHECK_GT(length_, -kMathEpsilon);
   CHECK_GT(width_, -kMathEpsilon);
@@ -116,14 +102,9 @@ void Box2d::InitCorners() {
 }
 
 Box2d::Box2d(const AABox2d &aabox)
-    : center_(aabox.center()),
-      length_(aabox.length()),
-      width_(aabox.width()),
-      half_length_(aabox.half_length()),
-      half_width_(aabox.half_width()),
-      heading_(0.0),
-      cos_heading_(1.0),
-      sin_heading_(0.0) {
+    : center_(aabox.center()), length_(aabox.length()), width_(aabox.width()),
+      half_length_(aabox.half_length()), half_width_(aabox.half_width()),
+      heading_(0.0), cos_heading_(1.0), sin_heading_(0.0) {
   CHECK_GT(length_, -kMathEpsilon);
   CHECK_GT(width_, -kMathEpsilon);
 }
@@ -286,48 +267,47 @@ double Box2d::DistanceTo(const LineSegment2d &line_segment) const {
   }
   if (gx1 == 1 && gy1 == 1) {
     switch (gx2 * 3 + gy2) {
-      case 4:
-        return PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                             line_segment.length());
-      case 3:
-        return (x1 > x2) ? (x2 - box_x)
-                         : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                         line_segment.length());
-      case 2:
-        return (x1 > x2) ? PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
-                                         line_segment.length())
-                         : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                         line_segment.length());
-      case -1:
-        return CrossProd({x1, y1}, {x2, y2}, {box_x, -box_y}) >= 0.0
-                   ? 0.0
-                   : PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
-                                   line_segment.length());
-      case -4:
-        return CrossProd({x1, y1}, {x2, y2}, {box_x, -box_y}) <= 0.0
-                   ? PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
-                                   line_segment.length())
-                   : (CrossProd({x1, y1}, {x2, y2}, {-box_x, box_y}) <= 0.0
-                          ? 0.0
-                          : PtSegDistance(-box_x, box_y, x1, y1, x2, y2,
-                                          line_segment.length()));
+    case 4:
+      return PtSegDistance(box_x, box_y, x1, y1, x2, y2, line_segment.length());
+    case 3:
+      return (x1 > x2) ? (x2 - box_x)
+                       : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
+                                       line_segment.length());
+    case 2:
+      return (x1 > x2) ? PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
+                                       line_segment.length())
+                       : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
+                                       line_segment.length());
+    case -1:
+      return CrossProd({x1, y1}, {x2, y2}, {box_x, -box_y}) >= 0.0
+                 ? 0.0
+                 : PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
+                                 line_segment.length());
+    case -4:
+      return CrossProd({x1, y1}, {x2, y2}, {box_x, -box_y}) <= 0.0
+                 ? PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
+                                 line_segment.length())
+                 : (CrossProd({x1, y1}, {x2, y2}, {-box_x, box_y}) <= 0.0
+                        ? 0.0
+                        : PtSegDistance(-box_x, box_y, x1, y1, x2, y2,
+                                        line_segment.length()));
     }
   } else {
     switch (gx2 * 3 + gy2) {
-      case 4:
-        return (x1 < x2) ? (x1 - box_x)
-                         : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                         line_segment.length());
-      case 3:
-        return std::min(x1, x2) - box_x;
-      case 1:
-      case -2:
-        return CrossProd({x1, y1}, {x2, y2}, {box_x, box_y}) <= 0.0
-                   ? 0.0
-                   : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                   line_segment.length());
-      case -3:
-        return 0.0;
+    case 4:
+      return (x1 < x2) ? (x1 - box_x)
+                       : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
+                                       line_segment.length());
+    case 3:
+      return std::min(x1, x2) - box_x;
+    case 1:
+    case -2:
+      return CrossProd({x1, y1}, {x2, y2}, {box_x, box_y}) <= 0.0
+                 ? 0.0
+                 : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
+                                 line_segment.length());
+    case -3:
+      return 0.0;
     }
   }
   ACHECK(0) << "unimplemented state: " << gx1 << " " << gy1 << " " << gx2 << " "
@@ -416,11 +396,11 @@ void Box2d::LateralExtend(const double extension_length) {
 }
 
 std::string Box2d::DebugString() const {
-  return absl::StrCat("box2d ( center = ", center_.DebugString(),
-                      "  heading = ", heading_, "  length = ", length_,
-                      "  width = ", width_, " )");
+  return fmt::format(
+      "box2d ( center = {}, heading = {}, length = {}, width = {} )",
+      center_.DebugString(), heading_, length_, width_);
 }
 
-}  // namespace math
-}  // namespace common
-}  // namespace apollo
+} // namespace math
+} // namespace common
+} // namespace apollo

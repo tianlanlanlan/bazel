@@ -16,10 +16,10 @@
 
 #include "common/math/aabox2d.h"
 
+#include "fmt/format.h"
 #include <algorithm>
 #include <cmath>
 
-#include "absl/strings/str_cat.h"
 #include "common/log/log.h"
 
 #include "common/math/math_utils.h"
@@ -29,11 +29,8 @@ namespace common {
 namespace math {
 
 AABox2d::AABox2d(const Vec2d &center, const double length, const double width)
-    : center_(center),
-      length_(length),
-      width_(width),
-      half_length_(length / 2.0),
-      half_width_(width / 2.0) {
+    : center_(center), length_(length), width_(width),
+      half_length_(length / 2.0), half_width_(width / 2.0) {
   CHECK_GT(length_, -kMathEpsilon);
   CHECK_GT(width_, -kMathEpsilon);
 }
@@ -146,10 +143,10 @@ void AABox2d::MergeFrom(const Vec2d &other_point) {
 }
 
 std::string AABox2d::DebugString() const {
-  return absl::StrCat("aabox2d ( center = ", center_.DebugString(),
-                      "  length = ", length_, "  width = ", width_, " )");
+  return fmt::format("aabox2d ( center = {}, length = {}, width = {} )",
+                     center_.DebugString(), length_, width_);
 }
 
-}  // namespace math
-}  // namespace common
-}  // namespace apollo
+} // namespace math
+} // namespace common
+} // namespace apollo

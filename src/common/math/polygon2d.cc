@@ -21,9 +21,7 @@
 #include <limits>
 #include <utility>
 
-#include "absl/strings/str_cat.h"
-#include "absl/strings/str_join.h"
-
+#include "fmt/format.h"
 #include "common/log/log.h"
 #include "common/math/math_utils.h"
 

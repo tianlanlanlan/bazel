@@ -69,5 +69,6 @@ cc_library(
         "//src/common/math/qp_solver",
         "@eigen",
         "@osqp",
+        "@fmt",
     ],
 )
