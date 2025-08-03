@@ -5,8 +5,9 @@
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
 
-# bazel_dep(name = "rules_cuda", version = "0.2.5")
 bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "protobuf", version = "32.0-rc1", repo_name = "com_google_protobuf")
+bazel_dep(name = "rules_proto", version = "7.1.0")
 
 # Choose the most recent version available at
 # https://registry.bazel.build/modules/googletest
@@ -21,6 +22,7 @@ local_path_override(
     module_name = "hedron_compile_commands",
     path = "rules/hedron_compile_commands",
 )
+bazel_dep(name = "rules_python", version = "1.5.1")
 
 # For common math
 bazel_dep(name = "eigen", version = "4.0.0-20241125.bcr.2")

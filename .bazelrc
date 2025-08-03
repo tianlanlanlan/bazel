@@ -52,6 +52,7 @@ common --enable_platform_specific_config
 # build 配置
 # -----------------------------------------------------------------------------
 build --subcommands
+build --spawn_strategy=local
 # build --sandbox_debug
 # 关键配置：设置缓存目录，加速不同目录相同代码的编译
 build --disk_cache=~/.cache/bazel

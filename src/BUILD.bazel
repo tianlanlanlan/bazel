@@ -1,46 +1,11 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("//rules:apollo_package.bzl", "apollo_cc_library")
-load("//rules/legacy_macros:miniature.bzl", "miniature")
 
 package(default_visibility = ["//visibility:public"])
 
 # -----------------------------------------------------------------------------
 # Common target
 # -----------------------------------------------------------------------------
-# cc_binary(
-#     name = "libcommon.so",
-#     srcs = [
-#         "common/common.cc",
-#         "common/common.h",
-#     ],
-#     linkshared = True,
-#     linkstatic = True,
-#     tags = [
-#         "common",
-#         "export_library",
-#     ],
-#     deps = [
-#         "//proto:all_custom_cc_proto",
-#         "//src/common/math",
-#     ],
-# )
-
-# cc_library(
-#     name = "common",
-#     srcs = [
-#         ":libcommon.so",
-#     ],
-#     hdrs = [
-#         "common/common.h",
-#     ],
-#     strip_include_prefix = "/src",
-#     deps = [
-#         "//proto:all_custom_cc_proto",
-#         "//src/common/math",
-#     ],
-#     alwayslink = True,
-# )
-
-# apollo_cc_library 等同于上面的 cc_binary + cc_library
 apollo_cc_library(
     name = "common",
     srcs = [
@@ -74,7 +39,7 @@ apollo_cc_library(
 # -----------------------------------------------------------------------------
 # planning_component
 # -----------------------------------------------------------------------------
-cc_library(
+apollo_cc_library(
     name = "planning_component",
     srcs = [
         "component/planning_component.cc",

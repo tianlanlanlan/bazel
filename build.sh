@@ -25,10 +25,13 @@ install() {
 }
 
 refresh() {
-    bazel run refresh_compile_commands || printf $(
-        tput setaf 1
-        tput bold
-    )'Refresh compile commands failed\n'$(tput sgr0)
+    # bazel run refresh_compile_commands || printf $(
+    #     tput setaf 1
+    #     tput bold
+    # )'Refresh compile commands failed\n'$(tput sgr0)
+
+    ./bazel-compile-commands //src/... //proto/...
+    
 }
 
 format_bazel() {

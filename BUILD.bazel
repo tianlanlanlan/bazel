@@ -25,8 +25,8 @@ refresh_compile_commands(
     # Specify the targets of interest.
     # For example, specify a dict of targets and any flags required to build.
     targets = {
-        "//src/...": "",
-        "//test/...": "",
+        "//src:node": "",
+        # "//test/...": "",
     },
 
     # No need to add flags already in .bazelrc. They're automatically picked up.
@@ -39,9 +39,13 @@ refresh_compile_commands(
 # Target for copy build artifacts to a directory.
 installer(
     name = "install",
+    compilation_mode = "",
     data = [
+        "//src:common",
+        "//src:framework",
         "//src:main",
-        "//src/common/math",
+        "//src:node",
+        "//src:planning_component",
     ],
 )
 

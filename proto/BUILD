@@ -1,3 +1,7 @@
+load("//rules/proto:proto.bzl", "apollo_proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
 proto_library(
     name = "all_custom_proto",
     srcs = [
@@ -14,3 +18,14 @@ cc_proto_library(
     visibility = ["//visibility:public"],
     deps = [":all_custom_proto"],
 )
+
+# apollo_proto_library(
+#     name = "new_all_custom_proto",
+#     srcs = [
+#         "perf_info.proto",
+#         "pnc_point.proto",
+#         "status.proto",
+#     ],
+#     strip_import_prefix = "/proto",
+#     # visibility = ["//visibility:public"],
+# )
