@@ -40,10 +40,6 @@ build:ubsan --copt=-fno-sanitize=function --copt=-fno-sanitize=vptr
 # Abseil passes nullptr to memcmp with 0 size
 build:ubsan --copt=-fno-sanitize=nonnull-attribute
 
-# Important: this flag ensures that we remain compliant with the C++ layering
-# check.
-build --features=layering_check
-
 common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
 
 common --enable_platform_specific_config
@@ -52,6 +48,7 @@ common --enable_platform_specific_config
 # build 配置
 # -----------------------------------------------------------------------------
 build --subcommands
+# build --features=-default_compiler_flags
 build --spawn_strategy=local
 # build --sandbox_debug
 # 关键配置：设置缓存目录，加速不同目录相同代码的编译

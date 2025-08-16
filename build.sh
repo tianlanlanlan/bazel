@@ -25,13 +25,14 @@ install() {
 }
 
 refresh() {
-    # bazel run refresh_compile_commands || printf $(
-    #     tput setaf 1
-    #     tput bold
-    # )'Refresh compile commands failed\n'$(tput sgr0)
-
-    ./bazel-compile-commands //src/... //proto/...
-    
+    if [ $(command -v bazel-compile-commands) ]; then
+        bazel-compile-commands //src/... //proto/... --output $current_script_dir/compile_commands.json
+    else
+        printf $(
+            tput setaf 3
+            tput bold
+        )'bazel-compile-commands not found, please install it first, download it from https://github.com/kiron1/bazel-compile-commands/releases/tag/v0.17.2 \n'$(tput sgr0)
+    fi
 }
 
 format_bazel() {
