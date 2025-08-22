@@ -52,4 +52,18 @@ build --subcommands
 build --spawn_strategy=local
 # build --sandbox_debug
 # 关键配置：设置缓存目录，加速不同目录相同代码的编译
-build --disk_cache=~/.cache/bazel
+
+# 如何使用 Bazel 离线编译
+# Step1. 在 bazelrc 中配置：
+common --repository_cache=bazel/repository_cache/
+common --registry="file:////home/tianlan/test/bazel/bazel/bazel-central-registry"
+
+# Step2. 执行 bazel fetch //src:node
+
+# Step3. 去掉 build --disk_cache 配置
+# build --disk_cache=~/.cache/bazel
+
+# Step4. 断网
+
+# Step5. 测试 bazel build //src:node
+
