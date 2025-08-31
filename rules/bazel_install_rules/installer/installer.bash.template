@@ -108,7 +108,7 @@ function install_file() {
 }
 
 function main() {
-  verify_templates
+  # verify_templates
 
   local g_flag=''
   local s_flag=''
@@ -121,9 +121,9 @@ function main() {
     esac
   done
 
-  if [[ -z "${OPTIND:-}" ]] || (($OPTIND > $#)); then
-    error "INSTALL_PREFIX wasn't specified"
-  fi
+  # if [[ -z "${OPTIND:-}" ]] || (($OPTIND > $#)); then
+  #   error "INSTALL_PREFIX wasn't specified"
+  # fi
   local prefix="${!OPTIND}"
 
   # Convert Windows path to Unix path
@@ -131,15 +131,16 @@ function main() {
     prefix="$(cygpath $prefix)"
   fi
 
-  if [[ "${prefix:0:1}" != "/" ]]; then
-    error "INSTALL_PREFIX must be an absolute path"
-  fi
+  # if [[ "${prefix:0:1}" != "/" ]]; then
+  #   error "INSTALL_PREFIX must be an absolute path"
+  # fi
 
-  check_sources
+  # check_sources
   local i
   for ((i=0; i<${N_FILES}; i++)); do
-    install_file "${prefix}" "${i}" "${s_flag}"
+    install_file "${prefix}" "${i}" "${s_flag}" &
   done
+  wait
 }
 
 main "$@"

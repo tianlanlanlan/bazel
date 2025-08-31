@@ -59,9 +59,13 @@ def _gen_install_binary_impl(ctx):
             if file_path.startswith(external_prefix):
                 file_path = file_path[len(external_prefix):]
 
-            sources.append(workspace + "/" + file_path)
+            # sources.append(workspace + "/" + file_path)
             target = paths.join(ctx.attr.target_subdir, paths.basename(file.short_path))
-            targets.append(target)
+            # targets.append(target)
+
+            if target not in targets:
+                targets.append(target)
+                sources.append(workspace + "/" + file_path)
 
     ctx.actions.expand_template(
         output = ctx.outputs.out,
