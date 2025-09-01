@@ -14,7 +14,6 @@ apollo_cc_library(
     hdrs = [
         "common/common.h",
     ],
-    strip_include_prefix = "/src",
     deps = [
         "//proto:all_custom_cc_proto",
         "//src/common/math",
@@ -33,7 +32,6 @@ apollo_cc_library(
         "framework/component_interface.h",
         "framework/component_macro.h",
     ],
-    strip_include_prefix = "/src",
 )
 
 # -----------------------------------------------------------------------------
@@ -47,7 +45,6 @@ apollo_cc_library(
     hdrs = [
         "component/planning_component.h",
     ],
-    strip_include_prefix = "/src",
     deps = [
         "//proto:all_custom_cc_proto",
         "//src:framework",

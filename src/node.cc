@@ -1,6 +1,7 @@
+#include "common/math/vec2d.h"
 #include "framework/component_interface.h"
-#include <memory>
 #include <iostream>
+#include <memory>
 
 extern "C" {
 void init() {
@@ -10,5 +11,8 @@ void init() {
   std::unique_ptr<ComponentInterface> ptr =
       ComFactory::Instance()->Create("PlanningComponent");
   ptr->Init();
+
+  apollo::common::math::Vec2d vec(3.0, 4.0);
+  std::cout << "Vec2d length: " << vec.Length() << std::endl;
 }
 }
