@@ -8,3 +8,6 @@
 # Clangd
 /.clangd
 /.cache
+
+# Coverage
+/genhtml

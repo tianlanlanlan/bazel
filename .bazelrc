@@ -47,7 +47,7 @@ common --enable_platform_specific_config
 # -----------------------------------------------------------------------------
 # build 配置
 # -----------------------------------------------------------------------------
-build --subcommands
+# build --subcommands
 # build --features=-default_compiler_flags
 build --spawn_strategy=local
 # build --sandbox_debug
@@ -57,7 +57,7 @@ build --spawn_strategy=local
 # 如何使用 Bazel 离线编译
 # -----------------------------------------------------------------------------
 # Step1. 在 bazelrc 中配置：
-common --repository_cache=bazel/repository_cache/
+# common --repository_cache=bazel/repository_cache/
 # common --registry="file:////home/tianlan/test/bazel/bazel/bazel-central-registry"
 
 # Step2. 执行 bazel fetch //src:node
@@ -70,3 +70,8 @@ common --repository_cache=bazel/repository_cache/
 # Step5. 测试 bazel build //src:node
 
 build --copt=-Isrc/
+build --disk_cache=~/.cache/bazel
+
+test --test_verbose_timeout_warnings
+
+common --experimental_downloader_config=bazel_downloader.cfg

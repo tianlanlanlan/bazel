@@ -4,7 +4,9 @@ cc_library(
     name = "common_math_vec2d",
     srcs = ["vec2d.cc"],
     hdrs = ["vec2d.h"],
-    strip_include_prefix = "/src",
+    deps = [
+        "//src/common/log",
+    ],
 )
 
 cc_test(
@@ -13,6 +15,19 @@ cc_test(
     srcs = ["vec2d_test.cc"],
     deps = [
         ":common_math_vec2d",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "aabox2d_test",
+    size = "small",
+    srcs = [
+        "aabox2d_test.cc",
+    ],
+    deps = [
+        ":math",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],

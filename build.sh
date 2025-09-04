@@ -93,6 +93,11 @@ x86)
   )
   bazel_build
   ;;
+coverage)
+  bazel coverage --combined_report=lcov //src/...
+
+  genhtml --output genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat"
+  ;;
 *)
   build_config=(
     # --config asan
