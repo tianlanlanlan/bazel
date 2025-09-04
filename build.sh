@@ -94,7 +94,9 @@ x86)
   bazel_build
   ;;
 coverage)
-  bazel coverage --combined_report=lcov //src/...
+  bazel coverage \
+    --combined_report=lcov \
+    --strategy=CoverageReport=local //test/...
 
   genhtml --output genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat"
   ;;

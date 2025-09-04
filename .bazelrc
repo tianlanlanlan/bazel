@@ -50,6 +50,7 @@ common --enable_platform_specific_config
 # build --subcommands
 # build --features=-default_compiler_flags
 build --spawn_strategy=local
+build --verbose_failures
 # build --sandbox_debug
 # 关键配置：设置缓存目录，加速不同目录相同代码的编译
 
@@ -69,7 +70,7 @@ build --spawn_strategy=local
 
 # Step5. 测试 bazel build //src:node
 
-build --copt=-Isrc/
+# build --copt=-Isrc/
 build --disk_cache=~/.cache/bazel
 
 test --test_verbose_timeout_warnings

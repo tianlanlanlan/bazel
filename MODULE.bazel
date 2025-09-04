@@ -61,6 +61,3 @@ cc_library(
 )
 """,
 )
-
-remote_coverage_tools_extension = use_extension("//bazel/coverage_output_generator:extensions.bzl", "remote_coverage_tools_extension")
-use_repo(remote_coverage_tools_extension, "remote_coverage_tools")
