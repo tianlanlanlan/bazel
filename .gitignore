@@ -2,8 +2,10 @@
 /bazel-*
 /output
 /build
+/external
 /MODULE.bazel.lock
 !/bazel-complete.bash
+/compile_commands.json
 
 # Clangd
 /.clangd

@@ -60,17 +60,20 @@ def apollo_cc_library(**kwargs):
         for i in select_dict_list:
             merge_src += select(i)
 
+    includr_prefix_copts = ["-Isrc/"] + kwargs.pop("copts", [])
     cc_binary(**dict(
         bin_kwargs,
         name = "lib{}.so".format(bin_kwargs["name"]),
         linkshared = True,
         linkstatic = True,
+        copts = includr_prefix_copts,
         srcs = merge_src,
         visibility = ["//visibility:public"],
         tags = ["export_library", kwargs["name"]],
     ))
     cc_library(**dict(
         kwargs,
+        copts = includr_prefix_copts,
         srcs = [":lib{}.so".format(kwargs["name"])],
         alwayslink = True,
         visibility = ["//visibility:public"],
