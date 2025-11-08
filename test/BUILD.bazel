@@ -31,9 +31,8 @@ cc_test(
     size = "small",
     srcs = ["foo_test.cc"],
     deps = [
-        "@googletest//:gtest",
-        # "@googletest//:gtest_main",
         ":ut_main",
+        "@googletest//:gtest",
     ],
 )
 
@@ -49,4 +48,10 @@ genrule(
             --source $(location log.cc)
     """,
     tools = ["gen_log.sh"],
+)
+
+cc_test(
+    name = "signal_hander_test",
+    size = "small",
+    srcs = ["signal_handler_test.c"],
 )

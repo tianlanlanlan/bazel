@@ -16,3 +16,6 @@
 
 /*.txt
 /*.gz
+
+# rust
+/rust/target

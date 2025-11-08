@@ -70,3 +70,4 @@ build:ubsan --copt=-fno-sanitize=nonnull-attribute
 # Bazel test
 # -----------------------------------------------------------------------------
 test --test_verbose_timeout_warnings
+test --test_output=all
