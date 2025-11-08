@@ -1,0 +1,52 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "foo",
+    srcs = ["foo.cc"],
+    hdrs = ["foo.h"],
+)
+
+cc_test(
+    name = "log_test",
+    size = "small",
+    srcs = ["log_test.cc"],
+    deps = [
+        ":foo",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "@spdlog",
+    ],
+)
+
+cc_library(
+    name = "ut_main",
+    srcs = ["ut_main.cc"],
+    deps = [
+        "@googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "foo_test",
+    size = "small",
+    srcs = ["foo_test.cc"],
+    deps = [
+        "@googletest//:gtest",
+        # "@googletest//:gtest_main",
+        ":ut_main",
+    ],
+)
+
+genrule(
+    name = "gen_log",
+    outs = [
+        "log.h",
+        "log.cc",
+    ],
+    cmd = """
+        bash $(location gen_log.sh) \
+            --header $(location log.h) \
+            --source $(location log.cc)
+    """,
+    tools = ["gen_log.sh"],
+)

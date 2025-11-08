@@ -4,6 +4,7 @@
 class PlanningComponent : public ComponentInterface {
 public:
   bool Init() override;
+  bool Proc() override;
 };
 
 // 注册组件到工厂

@@ -10,6 +10,7 @@ class ComponentInterface {
 public:
   virtual ~ComponentInterface() = default;
   virtual bool Init() = 0;
+  virtual bool Proc() { return true; }
 };
 
 // 组件工厂类

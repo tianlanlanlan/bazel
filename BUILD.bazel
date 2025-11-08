@@ -41,11 +41,8 @@ installer(
     name = "install",
     compilation_mode = "",
     data = [
-        "//src:common",
-        "//src:framework",
         "//src:main",
         "//src:node",
-        "//src:planning_component",
     ],
 )
 

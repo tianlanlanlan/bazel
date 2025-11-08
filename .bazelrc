@@ -1,21 +1,38 @@
-build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
+# -----------------------------------------------------------------------------
+# common 配置
+# -----------------------------------------------------------------------------
+common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
+common --enable_platform_specific_config
+common --experimental_downloader_config=bazel_downloader.cfg
 
+# -----------------------------------------------------------------------------
+# common configuration for bazel build
+# -----------------------------------------------------------------------------
 build --show_timestamps
-# Enable colorful output of GCC
-build --cxxopt="-fdiagnostics-color=always"
-build --copt="-Werror=return-type"
-
-# Print all build command
 # build --subcommands
+build --spawn_strategy=local
+build --verbose_failures
+build --disk_cache=~/.cache/bazel
+# build --features=-default_compiler_flags
+# build --sandbox_debug
+build --config=Debug
+build --copt="-Werror=return-type"
+build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
+build --copt=-Isrc/
+build --copt="-fdiagnostics-color=always"
+
+# -----------------------------------------------------------------------------
+# Build type config
+# -----------------------------------------------------------------------------
+build:Debug --copt=-g
+build:Debug --cxxopt=-g
+build:Debug --copt=-O0
+build:Debug --compilation_mode=dbg
+build:Debug --strip=never
 
 build:dbg --compilation_mode=dbg
-
 build:opt --compilation_mode=opt
-
 build:san-common --config=dbg --strip=never --copt=-O0 --copt=-fno-omit-frame-pointer
-
-# build:asan --config=san-common --copt=-fsanitize=address --linkopt=-fsanitize=address
-# build:asan --dynamic_mode=off
 
 # ASan 配置
 build:asan --copt=-fsanitize=address
@@ -34,36 +51,22 @@ build:tsan --config=san-common --copt=-fsanitize=thread --linkopt=-fsanitize=thr
 
 build:ubsan --config=san-common --copt=-fsanitize=undefined --linkopt=-fsanitize=undefined
 build:ubsan --action_env=UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
-# Workaround for the fact that Bazel links with $CC, not $CXX
-# https://github.com/bazelbuild/bazel/issues/11122#issuecomment-613746748
 build:ubsan --copt=-fno-sanitize=function --copt=-fno-sanitize=vptr
-# Abseil passes nullptr to memcmp with 0 size
 build:ubsan --copt=-fno-sanitize=nonnull-attribute
 
-common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
-
-common --enable_platform_specific_config
-
 # -----------------------------------------------------------------------------
-# build 配置
-# -----------------------------------------------------------------------------
-build --subcommands
-# build --features=-default_compiler_flags
-build --spawn_strategy=local
-# build --sandbox_debug
-# 关键配置：设置缓存目录，加速不同目录相同代码的编译
-
 # 如何使用 Bazel 离线编译
+# -----------------------------------------------------------------------------
 # Step1. 在 bazelrc 中配置：
-common --repository_cache=bazel/repository_cache/
-common --registry="file:////home/tianlan/test/bazel/bazel/bazel-central-registry"
-
+# common --repository_cache=bazel/repository_cache/
+# common --registry="file:////home/tianlan/test/bazel/bazel/bazel-central-registry"
 # Step2. 执行 bazel fetch //src:node
-
 # Step3. 去掉 build --disk_cache 配置
 # build --disk_cache=~/.cache/bazel
-
 # Step4. 断网
-
 # Step5. 测试 bazel build //src:node
 
+# -----------------------------------------------------------------------------
+# Bazel test
+# -----------------------------------------------------------------------------
+test --test_verbose_timeout_warnings

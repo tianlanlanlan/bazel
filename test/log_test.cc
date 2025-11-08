@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <spdlog/spdlog.h>
+#include "test/foo.h"
 
 //
 // Copyright(c) 2015 Gabi Melman.
@@ -420,3 +421,5 @@ int test_log() {
 }
 
 TEST(LogTest, BasicLogTest) { test_log(); }
+
+TEST(LogTest, BasicLogTestLog) { log(); }

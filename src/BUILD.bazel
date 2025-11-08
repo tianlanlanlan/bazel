@@ -6,7 +6,7 @@ package(default_visibility = ["//visibility:public"])
 # -----------------------------------------------------------------------------
 # Common target
 # -----------------------------------------------------------------------------
-apollo_cc_library(
+cc_library(
     name = "common",
     srcs = [
         "common/common.cc",
@@ -14,7 +14,6 @@ apollo_cc_library(
     hdrs = [
         "common/common.h",
     ],
-    strip_include_prefix = "/src",
     deps = [
         "//proto:all_custom_cc_proto",
         "//src/common/math",
@@ -24,7 +23,7 @@ apollo_cc_library(
 # -----------------------------------------------------------------------------
 # framwork
 # -----------------------------------------------------------------------------
-apollo_cc_library(
+cc_library(
     name = "framework",
     srcs = [
         "framework/component_interface.cc",
@@ -33,13 +32,12 @@ apollo_cc_library(
         "framework/component_interface.h",
         "framework/component_macro.h",
     ],
-    strip_include_prefix = "/src",
 )
 
 # -----------------------------------------------------------------------------
 # planning_component
 # -----------------------------------------------------------------------------
-apollo_cc_library(
+cc_library(
     name = "planning_component",
     srcs = [
         "component/planning_component.cc",
@@ -47,7 +45,6 @@ apollo_cc_library(
     hdrs = [
         "component/planning_component.h",
     ],
-    strip_include_prefix = "/src",
     deps = [
         "//proto:all_custom_cc_proto",
         "//src:framework",

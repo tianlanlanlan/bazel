@@ -1,3 +1,5 @@
+load("//rules:apollo_package.bzl", "apollo_cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
