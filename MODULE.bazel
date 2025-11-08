@@ -20,7 +20,7 @@ bazel_dep(name = "fmt", version = "11.2.0")
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 local_path_override(
     module_name = "hedron_compile_commands",
-    path = "rules/hedron_compile_commands",
+    path = "bazel/rules/hedron_compile_commands",
 )
 bazel_dep(name = "rules_python", version = "1.5.1")
 
@@ -35,7 +35,7 @@ bazel_dep(name = "glog", version = "0.7.1")
 bazel_dep(name = "com_github_google_rules_install")
 local_path_override(
     module_name = "com_github_google_rules_install",
-    path = "rules/bazel_install_rules",
+    path = "bazel/rules/bazel_install_rules",
 )
 
 # Add appropriate dependencies and register the toolchain

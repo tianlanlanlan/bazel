@@ -1,4 +1,4 @@
-load("//rules/proto:proto.bzl", "apollo_proto_library")
+load("//bazel/rules/proto:proto.bzl", "apollo_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
