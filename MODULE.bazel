@@ -42,7 +42,7 @@ local_path_override(
 # This step defines a cc_toolchain and binds it to a toolchain target for the host configuration
 bazel_dep(name = "platforms", version = "0.0.11")
 register_toolchains(
-    "//toolchain:cc_toolchain_for_linux_aarch64_rpi3",
+    "//bazel/toolchain:cc_toolchain_for_linux_aarch64_rpi3",
 )
 
 # The spdlog pre-built library
