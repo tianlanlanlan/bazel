@@ -19,3 +19,8 @@
 
 # rust
 /rust/target
+
+# thirdparty
+/thirdparty/spdlog-1.16.0/build/
+/thirdparty/spdlog-1.16.0/output/
+/thirdparty/spdlog-1.16.0/logs/

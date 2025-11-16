@@ -50,7 +50,7 @@ register_toolchains(
 new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 new_local_repository(
     name = "spdlog",
-    path = "third_party/spdlog/",
+    path = "//bazel/rules:apollo_package.bzl/spdlog/",
     build_file_content = """
 cc_library(
     name = "spdlog",
