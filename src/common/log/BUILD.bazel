@@ -4,10 +4,32 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "log",
+    srcs = ["log.cc"],
     hdrs = ["log.h"],
     strip_include_prefix = "/src",
     deps = [
+        # ":log_pimpl",
         "@fmt",
         "@glog",
+    ],
+)
+
+cc_library(
+    name = "log_pimpl",
+    srcs = ["log_pimpl.cc"],
+    hdrs = ["log_pimpl.h"],
+    deps = [
+        "//thirdparty/spdlog-1.16.0:spdlog",
+    ],
+)
+
+cc_test(
+    name = "log_test",
+    size = "small",
+    srcs = ["log_test.cc"],
+    deps = [
+        ":log",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ],
 )

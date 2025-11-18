@@ -1,0 +1,4 @@
+Language:        Cpp
+Standard: Auto
+ColumnLimit:     120
+IndentWidth: 4

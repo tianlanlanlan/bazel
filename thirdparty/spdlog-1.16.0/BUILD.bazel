@@ -1,0 +1,11 @@
+cc_library(
+    name = "spdlog",
+    srcs = glob([
+        "output/lib/*.so*",
+    ]),
+    hdrs = glob([
+        "output/spdlog/**/*",
+    ]),
+    includes = ["output/include"],
+    visibility = ["//visibility:public"],
+)
