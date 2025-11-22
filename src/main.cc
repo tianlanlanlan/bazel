@@ -1,37 +1,65 @@
+#include "framework/component_interface.h"
+#include "framework/registerer.h"
+
 #include <dlfcn.h>
 #include <iostream>
 #include <string>
+#include <thread>
 
-int main() {
-  // 1. 加载动态库
-  const char *lib_path = "bazel-bin/src/libnode.so";
-  std::cout << "[main] Start loading library: " << lib_path << std::endl;
-  void *handle = dlopen(lib_path, RTLD_LAZY);
+int main(int argc, char **argv) {
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " </path/to/libnode.so> <ComponentName>" << std::endl;
+        return 1;
+    }
 
-  if (!handle) {
-    std::cerr << "[main] 无法加载库: " << lib_path << "\n错误: " << dlerror()
-              << std::endl;
-    return 1;
-  }
+    char *shared_lib_path = argv[1];
+    char *component_name = argv[2];
 
-  // 2. 获取 init 函数指针
-  using InitFunction = void (*)(); // 定义函数指针类型
-  InitFunction init_func =
-      reinterpret_cast<InitFunction>(dlsym(handle, "init"));
+    // 1. 加载动态库
+    std::cout << "[Info] Start loading library: " << shared_lib_path << std::endl;
+    void *handle = dlopen(shared_lib_path, RTLD_LAZY | RTLD_GLOBAL);
 
-  const char *dlsym_error = dlerror();
-  if (dlsym_error) {
-    std::cerr << "[main] 无法找到 init 函数: " << dlsym_error << std::endl;
+    if (!handle) {
+        std::cerr << "[Error] 无法加载库: " << shared_lib_path << "\n错误: " << dlerror() << std::endl;
+        return 1;
+    }
+
+    // 2. 获取 init 函数指针
+    using InitFunction = void (*)(); // 定义函数指针类型
+    InitFunction init = reinterpret_cast<InitFunction>(dlsym(handle, "init"));
+
+    const char *dlsym_error = dlerror();
+    if (dlsym_error) {
+        std::cerr << "[Error] 无法找到 init 函数: " << dlsym_error << std::endl;
+        dlclose(handle);
+        return 1;
+    }
+
+    // 3. 调用 init 方法
+    init();
+
+    // Init component and run
+    std::unique_ptr<ComponentInterface> ptr = factory::Registry<ComponentInterface>::New(component_name);
+    if (ptr != nullptr) {
+        ptr->Init();
+        ptr->Proc();
+    } else {
+        std::cout << "[Error] Cannot create: " << component_name << std::endl;
+    }
+
+#if 0
+    // Init component and run
+    std::unique_ptr<ComponentInterface> ptr = ComFactory::Instance()->Create(component_name);
+    if (ptr != nullptr) {
+        ptr->Init();
+        ptr->Proc();
+    } else {
+        std::cout << "[Error] Cannot create: " << component_name << std::endl;
+    }
+#endif
+
+    // 4. 清理资源
     dlclose(handle);
-    return 1;
-  }
-
-  // 3. 调用 init 方法
-  std::cout << "成功加载 libnode.so, 调用 init 方法..." << std::endl;
-  init_func();
-
-  // 4. 清理资源
-  dlclose(handle);
-  std::cout << "程序执行完成" << std::endl;
-  return 0;
+    std::cout << "程序执行完成" << std::endl;
+    return 0;
 }

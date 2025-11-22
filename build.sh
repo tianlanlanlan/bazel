@@ -20,6 +20,7 @@ test() {
 }
 
 install() {
+  rm -rf $install_dir
   bazel run install -- $install_dir
 }
 

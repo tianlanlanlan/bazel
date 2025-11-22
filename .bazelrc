@@ -9,7 +9,7 @@ common --experimental_downloader_config=bazel_downloader.cfg
 # common configuration for bazel build
 # -----------------------------------------------------------------------------
 build --show_timestamps
-# build --subcommands
+build --subcommands
 build --spawn_strategy=local
 build --verbose_failures
 build --disk_cache=~/.cache/bazel
@@ -18,7 +18,6 @@ build --disk_cache=~/.cache/bazel
 build --config=Debug
 build --copt="-Werror=return-type"
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
-build --copt=-Isrc/
 build --copt="-fdiagnostics-color=always"
 
 # -----------------------------------------------------------------------------

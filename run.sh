@@ -6,10 +6,7 @@ run_main() {
   ldd bazel-bin/src/libnode.so
 
   # Run
-  bazel-bin/src/main
-
-  # Run with heaptrack
-  # heaptrack bazel-bin/src/main
+  bazel-bin/src/main "bazel-bin/src/libnode.so" "PlanningComponent"
 }
 
 # Run coverage

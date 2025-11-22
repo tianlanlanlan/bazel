@@ -1,0 +1,26 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# -----------------------------------------------------------------------------
+# framwork
+# -----------------------------------------------------------------------------
+pnc_cc_library(
+    name = "framework",
+    srcs = [
+        "component_interface.cc",
+    ],
+    hdrs = [
+        "component_interface.h",
+    ],
+)
+
+# -----------------------------------------------------------------------------
+# Target: registerer
+# -----------------------------------------------------------------------------
+pnc_cc_library(
+    name = "registerer",
+    hdrs = [
+        "registerer.h",
+    ],
+)

@@ -1,12 +1,11 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
-load("//bazel/rules:apollo_package.bzl", "apollo_cc_library")
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
 # -----------------------------------------------------------------------------
 # Common target
 # -----------------------------------------------------------------------------
-cc_library(
+pnc_cc_library(
     name = "common",
     srcs = [
         "common/common.cc",
@@ -21,23 +20,9 @@ cc_library(
 )
 
 # -----------------------------------------------------------------------------
-# framwork
-# -----------------------------------------------------------------------------
-cc_library(
-    name = "framework",
-    srcs = [
-        "framework/component_interface.cc",
-    ],
-    hdrs = [
-        "framework/component_interface.h",
-        "framework/component_macro.h",
-    ],
-)
-
-# -----------------------------------------------------------------------------
 # planning_component
 # -----------------------------------------------------------------------------
-cc_library(
+pnc_cc_library(
     name = "planning_component",
     srcs = [
         "component/planning_component.cc",
@@ -46,32 +31,38 @@ cc_library(
         "component/planning_component.h",
     ],
     deps = [
-        "//proto:all_custom_cc_proto",
-        "//src:framework",
-        "//src/common/math",
+        # "//proto:all_custom_cc_proto",
+        "//src/framework",
+        "//src/framework:registerer",
+        # "//src/common/math",
     ],
 )
 
 # -----------------------------------------------------------------------------
 # main
 # -----------------------------------------------------------------------------
-cc_binary(
+pnc_cc_binary(
     name = "main",
     srcs = ["main.cc"],
     linkopts = ["-ldl"],
+    deps = [
+        "//src/framework",
+        "//src/framework:registerer",
+    ],
 )
 
 # -----------------------------------------------------------------------------
 # node
 # -----------------------------------------------------------------------------
-cc_binary(
+pnc_cc_binary(
     name = "node",
     srcs = ["node.cc"],
+    linkopts = ["-Wl,-rpath,$ORIGIN"],
     linkshared = True,
     linkstatic = False,
     deps = [
-        "//src:common",
-        "//src:framework",
+        # "//src:common",
+        "//src/framework",
         "//src:planning_component",
     ],
 )
