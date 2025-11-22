@@ -246,7 +246,7 @@ template <typename T, class... Args> class Registry {
             result.reset(entry.second->function(args...));
         }
         registry_mutex_.unlock();
-        return std::move(result);
+        return result;
     }
 
     // Return the key under which class `C` is registered. The header

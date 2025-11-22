@@ -1,0 +1,11 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+pnc_cc_library(
+    name = "modules",
+    deps = [
+        "//src/modules/control:control_module",
+        "//src/modules/planning:planning_module",
+    ],
+)

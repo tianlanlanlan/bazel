@@ -16,11 +16,11 @@ int main(int argc, char **argv) {
     char *component_name = argv[2];
 
     // 1. 加载动态库
-    std::cout << "[Info] Start loading library: " << shared_lib_path << std::endl;
+    std::cout << "[INFO] Start loading library: " << shared_lib_path << std::endl;
     void *handle = dlopen(shared_lib_path, RTLD_LAZY | RTLD_GLOBAL);
 
     if (!handle) {
-        std::cerr << "[Error] 无法加载库: " << shared_lib_path << "\n错误: " << dlerror() << std::endl;
+        std::cerr << "[ERROR] 无法加载库: " << shared_lib_path << "\n错误: " << dlerror() << std::endl;
         return 1;
     }
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 
     const char *dlsym_error = dlerror();
     if (dlsym_error) {
-        std::cerr << "[Error] 无法找到 init 函数: " << dlsym_error << std::endl;
+        std::cerr << "[ERROR] 无法找到 init 函数: " << dlsym_error << std::endl;
         dlclose(handle);
         return 1;
     }
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         ptr->Init();
         ptr->Proc();
     } else {
-        std::cout << "[Error] Cannot create: " << component_name << std::endl;
+        std::cout << "[ERROR] Cannot create: '" << component_name << "' with dlopen" << std::endl;
     }
 
 #if 0
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
         ptr->Init();
         ptr->Proc();
     } else {
-        std::cout << "[Error] Cannot create: " << component_name << std::endl;
+        std::cout << "[ERROR] Cannot create: " << component_name << std::endl;
     }
 #endif
 

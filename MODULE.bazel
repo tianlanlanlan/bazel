@@ -38,13 +38,6 @@ local_path_override(
     path = "bazel/rules/bazel_install_rules",
 )
 
-# Add appropriate dependencies and register the toolchain
-# This step defines a cc_toolchain and binds it to a toolchain target for the host configuration
-bazel_dep(name = "platforms", version = "0.0.11")
-register_toolchains(
-    "//bazel/toolchain:cc_toolchain_for_linux_aarch64_rpi3",
-)
-
 # The spdlog pre-built library
 # Query this repo info by 'bazel query 'deps(@spdlog)' --output=build'
 new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
@@ -60,4 +53,16 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 """,
+)
+
+# -----------------------------------------------------------------------------
+# Register toolchains
+# -----------------------------------------------------------------------------
+bazel_dep(name = "platforms", version = "0.0.11")
+register_toolchains(
+    "//bazel/toolchain/aarch64_rpi3:cc_toolchain_for_linux_aarch64_rpi3",
+)
+
+register_toolchains(
+    "//bazel/toolchain/clang:clang_cc_toolchain_for_linux_x86_64",
 )

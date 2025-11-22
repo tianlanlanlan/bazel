@@ -3,10 +3,11 @@ set -e
 
 run_main() {
   # ldd libnode.so
+  ls -lh bazel-bin/src/libnode.so
   ldd bazel-bin/src/libnode.so
 
   # Run
-  bazel-bin/src/main "bazel-bin/src/libnode.so" "PlanningComponent"
+  bazel-bin/src/main "bazel-bin/src/libnode.so" "PlanningModule"
 }
 
 # Run coverage

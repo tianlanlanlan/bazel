@@ -1,0 +1,44 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+pnc_cc_library(
+    name = "tasks",
+    deps = [
+        ":lat_planning_task",
+    ],
+)
+
+# -----------------------------------------------------------------------------
+# lat_planning_task
+# -----------------------------------------------------------------------------
+pnc_cc_library(
+    name = "lat_planning_task",
+    srcs = [
+        "lat_planning_task.cc",
+    ],
+    hdrs = [
+        "lat_planning_task.h",
+    ],
+    deps = [
+        ":lat_planning_utils",
+        "//src/common/math:vec2d",
+        "//src/framework",
+        "//src/framework:registerer",
+        "//thirdparty/spdlog-1.16.0:spdlog",
+    ],
+    alwayslink = True,
+)
+
+pnc_cc_library(
+    name = "lat_planning_utils",
+    srcs = [
+        "lat_planning_utils.cc",
+    ],
+    hdrs = [
+        "lat_planning_utils.h",
+    ],
+    deps = [
+        "//thirdparty/spdlog-1.16.0:spdlog",
+    ],
+)

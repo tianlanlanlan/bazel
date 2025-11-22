@@ -1,0 +1,23 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# -----------------------------------------------------------------------------
+# control_module
+# -----------------------------------------------------------------------------
+pnc_cc_library(
+    name = "control_module",
+    srcs = [
+        "control_module.cc",
+    ],
+    hdrs = [
+        "control_module.h",
+    ],
+    # linkstatic = True,
+    deps = [
+        "//src/framework",
+        "//src/framework:registerer",
+        "//thirdparty/spdlog-1.16.0:spdlog",
+    ],
+    alwayslink = True,
+)

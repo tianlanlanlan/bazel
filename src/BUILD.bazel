@@ -20,25 +20,6 @@ pnc_cc_library(
 )
 
 # -----------------------------------------------------------------------------
-# planning_component
-# -----------------------------------------------------------------------------
-pnc_cc_library(
-    name = "planning_component",
-    srcs = [
-        "component/planning_component.cc",
-    ],
-    hdrs = [
-        "component/planning_component.h",
-    ],
-    deps = [
-        # "//proto:all_custom_cc_proto",
-        "//src/framework",
-        "//src/framework:registerer",
-        # "//src/common/math",
-    ],
-)
-
-# -----------------------------------------------------------------------------
 # main
 # -----------------------------------------------------------------------------
 pnc_cc_binary(
@@ -56,13 +37,15 @@ pnc_cc_binary(
 # -----------------------------------------------------------------------------
 pnc_cc_binary(
     name = "node",
-    srcs = ["node.cc"],
+    srcs = [
+        "node.cc",
+    ],
     linkopts = ["-Wl,-rpath,$ORIGIN"],
     linkshared = True,
-    linkstatic = False,
+    linkstatic = True,
     deps = [
         # "//src:common",
+        "//src/modules",
         "//src/framework",
-        "//src:planning_component",
     ],
 )

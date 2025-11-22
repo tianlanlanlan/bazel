@@ -71,4 +71,9 @@ gen_log() {
 
 }
 
-gen_log
+# gen_log
+
+bazel build //src:node_static
+rm -rf libnode_static.so-2.params
+cp -a bazel-out/k8-dbg/bin/src/libnode_static.so-2.params .
+ls bazel-bin/src/libnode_static.so -lh

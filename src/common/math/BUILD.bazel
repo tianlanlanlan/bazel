@@ -1,3 +1,4 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
 load("//bazel/rules:apollo_package.bzl", "apollo_cc_library")
 
 package(default_visibility = ["//visibility:public"])
@@ -52,7 +53,6 @@ cc_library(
         "polygon2d.cc",
         "search.cc",
         "sin_table.cc",
-        "vec2d.cc",
     ],
     hdrs = [
         "aabox2d.h",
@@ -76,16 +76,25 @@ cc_library(
         "quaternion.h",
         "search.h",
         "sin_table.h",
-        "vec2d.h",
     ],
     linkopts = ["-lm"],
     strip_include_prefix = "/src",
     deps = [
+        ":vec2d",
         "//proto:all_custom_cc_proto",
         "//src/common/log",
         "//src/common/math/qp_solver",
         "@eigen",
         "@fmt",
         "@osqp",
+    ],
+)
+
+pnc_cc_library(
+    name = "vec2d",
+    srcs = ["vec2d.cc"],
+    hdrs = ["vec2d.h"],
+    deps = [
+        "//src/common/log",
     ],
 )

@@ -2,12 +2,12 @@
 
 #include "src/framework/registerer.h"
 
-class PlanningComponent : public ComponentInterface {
+class PlanningModule : public ComponentInterface {
   public:
     bool Init() override;
     bool Proc() override;
 
-    REGISTER("PlanningComponent", ComponentInterface);
+    REGISTER("PlanningModule", ComponentInterface);
 };
 
 #if 0
@@ -19,5 +19,5 @@ class PlanningComponent : public ComponentInterface {
         return true;                                                                                                   \
     }()
 
-REGISTER_COMPONENT(PlanningComponent);
+REGISTER_COMPONENT(PlanningModule);
 #endif

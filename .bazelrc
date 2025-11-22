@@ -13,6 +13,7 @@ build --subcommands
 build --spawn_strategy=local
 build --verbose_failures
 build --disk_cache=~/.cache/bazel
+build --force_pic
 # build --features=-default_compiler_flags
 # build --sandbox_debug
 build --config=Debug
@@ -52,6 +53,18 @@ build:ubsan --config=san-common --copt=-fsanitize=undefined --linkopt=-fsanitize
 build:ubsan --action_env=UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
 build:ubsan --copt=-fno-sanitize=function --copt=-fno-sanitize=vptr
 build:ubsan --copt=-fno-sanitize=nonnull-attribute
+
+# -----------------------------------------------------------------------------
+# clang 14
+# -----------------------------------------------------------------------------
+build:clang --platforms=//:clang_14_x86_64
+build:clang --copt=-Wall
+build:clang --copt=-Wextra
+build:clang --copt=-Wfatal-errors
+build:clang --copt=-Wno-unused-parameter
+build:clang --copt=-Werror
+# build:clang --noincompatible_enable_cc_toolchain_resolution
+build --config=clang
 
 # -----------------------------------------------------------------------------
 # 如何使用 Bazel 离线编译

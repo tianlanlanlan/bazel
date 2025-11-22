@@ -10,8 +10,25 @@ clean() {
 }
 
 build() {
+  # Build main
   bazel build //src:main
+
+  build_node
+}
+
+build_node() {
+  # Build node
   bazel build //src:node
+
+  echo "=============================="
+  rm -rf *.params
+  cp bazel-out/k8-dbg/bin/src/libnode.so-2.params .
+  cp bazel-out/k8-dbg/bin/src/modules/planning/libplanning_module.lo-2.params .
+
+  ls -lh bazel-bin/src/libnode.so
+  ldd bazel-bin/src/libnode.so
+  # readelf -d bazel-bin/src/libnode.so | grep NEEDED
+  echo "=============================="
 }
 
 test() {

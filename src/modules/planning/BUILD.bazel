@@ -1,0 +1,26 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# -----------------------------------------------------------------------------
+# planning_module
+# -----------------------------------------------------------------------------
+pnc_cc_library(
+    name = "planning_module",
+    srcs = [
+        "planning_module.cc",
+    ],
+    hdrs = [
+        "planning_module.h",
+    ],
+    # linkstatic = True,
+    deps = [
+        # "//proto:all_custom_cc_proto",
+        "//src/framework",
+        "//src/framework:registerer",
+        "//src/common/math:vec2d",
+        "//thirdparty/spdlog-1.16.0:spdlog",
+        "//src/modules/planning/tasks",
+    ],
+    alwayslink = True,
+)
