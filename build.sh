@@ -36,11 +36,12 @@ refresh() {
 }
 
 format_bazel() {
-  [ $(command -v buildifier-linux-amd64) ] || {
+  local buildifier_cmd="buildifier"
+  [ $(command -v $buildifier_cmd) ] || {
     printf $(
       tput setaf 3
       tput bold
-    )'buildifier-linux-amd64 not found, please install it first\n'$(tput sgr0)
+    )'${buildifier_cmd} not found, please install it first\n'$(tput sgr0)
     return
   }
   find src -type f \( \
@@ -49,7 +50,7 @@ format_bazel() {
     -o -name "WORKSPACE" \
     -o -name "BUILD.bazel" \
     -o -name "*.BUILD" \
-    \) -exec "buildifier-linux-amd64" {} \;
+    \) -exec "$buildifier_cmd" {} \;
 }
 
 cmake_build() {
