@@ -32,7 +32,8 @@ bool PlanningModule::Proc() {
 
     std::vector<int *> ptrs(100, nullptr);
 
-    // malloc
+// malloc
+#if 0
     for (size_t i = 0; i < ptrs.size(); ++i) {
         // std::cout << "[planning] Allocating 1MB block " << i + 1 << std::endl;
         ptrs[i] = static_cast<int *>(malloc(1024 * 1024));
@@ -43,6 +44,7 @@ bool PlanningModule::Proc() {
         // std::cout << "[planning] Freeing 1MB block " << i + 1 << std::endl;
         free(ptrs[i]);
     }
+#endif
 
     {
         std::string task_name = "LatPlanningTask";

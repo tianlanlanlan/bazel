@@ -1,0 +1,9 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+pnc_cc_library(
+    name = "mem_info_utils",
+    srcs = ["mem_info_utils.cc"],
+    hdrs = ["mem_info_utils.h"],
+)

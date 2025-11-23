@@ -55,6 +55,20 @@ platform(
     ],
 )
 
+config_setting(
+    name = "one_lib",
+    define_values = {
+        "--output_lib_num": "one_lib",
+    },
+)
+
+config_setting(
+    name = "multi_lib",
+    define_values = {
+        "--output_lib_num": "multi_lib",
+    },
+)
+
 # -----------------------------------------------------------------------------
 # x86_64
 # -----------------------------------------------------------------------------

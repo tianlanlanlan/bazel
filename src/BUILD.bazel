@@ -27,6 +27,7 @@ pnc_cc_binary(
     srcs = ["main.cc"],
     linkopts = ["-ldl"],
     deps = [
+        "//src/common/utils:mem_info_utils",
         "//src/framework",
         "//src/framework:registerer",
     ],
@@ -42,7 +43,11 @@ pnc_cc_binary(
     ],
     linkopts = ["-Wl,-rpath,$ORIGIN"],
     linkshared = True,
-    linkstatic = True,
+    linkstatic = select({
+        "//:one_lib": True,
+        "//:multi_lib": False,
+        "//conditions:default": True,
+    }),
     deps = [
         # "//src:common",
         "//src/modules",

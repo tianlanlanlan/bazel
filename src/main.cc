@@ -1,7 +1,9 @@
+#include "common/utils/mem_info_utils.h"
 #include "framework/component_interface.h"
 #include "framework/registerer.h"
 
 #include <dlfcn.h>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -11,6 +13,8 @@ int main(int argc, char **argv) {
         std::cerr << "Usage: " << argv[0] << " </path/to/libnode.so> <ComponentName>" << std::endl;
         return 1;
     }
+
+    PrintSmapsInfo();
 
     char *shared_lib_path = argv[1];
     char *component_name = argv[2];
@@ -57,6 +61,8 @@ int main(int argc, char **argv) {
         std::cout << "[ERROR] Cannot create: " << component_name << std::endl;
     }
 #endif
+
+    PrintSmapsInfo();
 
     // 4. 清理资源
     dlclose(handle);
