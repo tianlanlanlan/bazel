@@ -4,29 +4,24 @@
 
 #include <iostream>
 
+#include "proto/perf_info.pb.h"
 #include "spdlog/spdlog.h"
-
-// #include "perf_info.pb.h"
 
 #include "common/math/vec2d.h"
 
 bool PlanningModule::Init() {
-    printf("PlanningModule::Init() called\n");
-
-    // PerfInfo proto;
-    // proto.set_duration_ms(100.0);
-    // printf("%s\n", proto.DebugString().c_str());
+    spdlog::info("PlanningModule::Init() called");
 
     apollo::common::math::Vec2d vec(1.0, 2.0);
     vec.set_x(3.0);
     vec.set_y(4.0);
-    printf("Vec2d: %s\n", vec.DebugString().c_str());
+    spdlog::info("Vec2d: {}", vec.DebugString().c_str());
 
     return true;
 }
 
 bool PlanningModule::Proc() {
-    printf("PlanningModule::Proc() called\n");
+    spdlog::info("PlanningModule::Proc() called");
 
     spdlog::info("PlanningModule processing started.");
 
@@ -56,6 +51,10 @@ bool PlanningModule::Proc() {
             std::cout << "[ERROR] Cannot create: " << task_name << std::endl;
         }
     }
+
+    PerfInfo proto;
+    proto.set_duration_ms(100.0);
+    spdlog::info("PerfInfo {}", proto.ShortDebugString());
 
     return true;
 }

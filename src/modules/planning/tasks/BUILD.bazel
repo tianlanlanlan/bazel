@@ -22,6 +22,7 @@ pnc_cc_library(
     ],
     deps = [
         ":lat_planning_utils",
+        "//proto:perf_info_cc_proto",
         "//src/common/math:vec2d",
         "//src/framework",
         "//src/framework:registerer",
@@ -39,6 +40,7 @@ pnc_cc_library(
         "lat_planning_utils.h",
     ],
     deps = [
+        "//proto:pnc_point_cc_proto",
         "//thirdparty/spdlog-1.16.0:spdlog",
     ],
 )

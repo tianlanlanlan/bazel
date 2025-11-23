@@ -13,14 +13,13 @@ pnc_cc_library(
     hdrs = [
         "planning_module.h",
     ],
-    # linkstatic = True,
     deps = [
-        # "//proto:all_custom_cc_proto",
+        "//proto:perf_info_cc_proto",
+        "//src/common/math:vec2d",
         "//src/framework",
         "//src/framework:registerer",
-        "//src/common/math:vec2d",
-        "//thirdparty/spdlog-1.16.0:spdlog",
         "//src/modules/planning/tasks",
+        "//thirdparty/spdlog-1.16.0:spdlog",
     ],
     alwayslink = True,
 )

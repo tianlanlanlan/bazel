@@ -15,6 +15,7 @@ pnc_cc_library(
     ],
     # linkstatic = True,
     deps = [
+        "//proto:status_cc_proto",
         "//src/framework",
         "//src/framework:registerer",
         "//thirdparty/spdlog-1.16.0:spdlog",

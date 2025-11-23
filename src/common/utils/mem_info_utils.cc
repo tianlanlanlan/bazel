@@ -1,5 +1,6 @@
-
 #include "mem_info_utils.h"
+
+#include <cstdint>
 #include <iostream>
 #include <mutex>
 

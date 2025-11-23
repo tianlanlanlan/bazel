@@ -1,31 +1,18 @@
-load("//bazel/rules/proto:proto.bzl", "apollo_proto_library")
+load("//bazel:package.bzl", "pnc_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
-proto_library(
-    name = "all_custom_proto",
-    srcs = [
-        "perf_info.proto",
-        "pnc_point.proto",
-        "status.proto",
-    ],
-    strip_import_prefix = "/proto",
-    visibility = ["//visibility:public"],
+pnc_proto_library(
+    name = "perf_info_proto",
+    srcs = ["perf_info.proto"],
 )
 
-cc_proto_library(
-    name = "all_custom_cc_proto",
-    visibility = ["//visibility:public"],
-    deps = [":all_custom_proto"],
+pnc_proto_library(
+    name = "status_proto",
+    srcs = ["status.proto"],
 )
 
-# apollo_proto_library(
-#     name = "new_all_custom_proto",
-#     srcs = [
-#         "perf_info.proto",
-#         "pnc_point.proto",
-#         "status.proto",
-#     ],
-#     strip_import_prefix = "/proto",
-#     # visibility = ["//visibility:public"],
-# )
+pnc_proto_library(
+    name = "pnc_point_proto",
+    srcs = ["pnc_point.proto"],
+)

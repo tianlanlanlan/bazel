@@ -21,7 +21,8 @@ build --copt=-Wall
 build --copt=-Wfatal-errors
 build --copt=-Wno-unused-parameter
 build --copt=-Werror
-build --define=--output_lib_num=one_lib
+build --copt=-Wno-deprecated-declarations
+build --define=--output_lib_num=one_lib # one_lib or multi_lib
 
 # -----------------------------------------------------------------------------
 # Build type config

@@ -1,23 +1,26 @@
 #include "control_module.h"
+
+#include "proto/status.pb.h"
+#include "spdlog/spdlog.h"
 #include <cstdio>
+#include <iostream>
 #include <vector>
 
-#include <iostream>
-
-#include "spdlog/spdlog.h"
-
 bool ControlModule::Init() {
-    printf("ControlModule::Init() called\n");
-
-    spdlog::info("ControlModule started.");
+    spdlog::info("ControlModule::Init() called");
 
     return true;
 }
 
 bool ControlModule::Proc() {
-    printf("ControlModule::Proc() called\n");
+    spdlog::info("ControlModule::Proc() called");
 
     std::vector<int *> ptrs(100, nullptr);
+
+    Status proto;
+    proto.set_name("ControlModule");
+    proto.set_id(1);
+    spdlog::info("Status {}", proto.ShortDebugString());
 
     return true;
 }

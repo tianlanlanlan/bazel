@@ -14,7 +14,6 @@ pnc_cc_library(
         "common/common.h",
     ],
     deps = [
-        "//proto:all_custom_cc_proto",
         "//src/common/math",
     ],
 )

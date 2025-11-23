@@ -1,9 +1,10 @@
 syntax = "proto2";
 
+// This proto file copied from apollo github repository.
 // Defined Point types that are commonly used in PnC (Planning and Control)
 // modules.
 
-package apollo.common;
+package pnc.common.proto;
 
 message SLPoint {
   optional double s = 1;
@@ -71,7 +72,6 @@ message TrajectoryPoint {
   optional double da = 5;
   // The angle between vehicle front wheel and vehicle longitudinal axis
   optional double steer = 6;
-
   // Gaussian probability information
   optional GaussianInfo gaussian_info = 7;
 }
