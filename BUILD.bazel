@@ -55,11 +55,38 @@ platform(
     ],
 )
 
+# -----------------------------------------------------------------------------
+# x86_64
+# -----------------------------------------------------------------------------
+config_setting(
+    name = "x86_platform",
+    define_values = {
+        "--platform": "x86",
+    },
+)
+
 platform(
     name = "clang_14_x86_64",
     constraint_values = [
         "@platforms//cpu:x86_64",
         "@platforms//os:linux",
-        # "//bazel/toolchain:clang_toolchain",
+    ],
+)
+
+# -----------------------------------------------------------------------------
+# riscv
+# -----------------------------------------------------------------------------
+config_setting(
+    name = "riscv_platform",
+    define_values = {
+        "--platform": "riscv",
+    },
+)
+
+platform(
+    name = "riscv",
+    constraint_values = [
+        "@platforms//cpu:riscv64",
+        "@platforms//os:linux",
     ],
 )

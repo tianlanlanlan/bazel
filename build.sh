@@ -5,43 +5,51 @@ set -e
 readonly current_script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 readonly install_dir="$(pwd)/output"
 
-clean() {
+function clean() {
   rm -rf $install_dir
 }
 
-build() {
-  # Build main
-  bazel build //src:main
-
-  build_node
+function run() {
+  (
+    set -x
+    $1
+  )
 }
 
-build_node() {
+function build() {
+  local platform="$1"
+  local build_cfg="--config=$platform"
+
+  # Build main
+  run "bazel build //src:main $build_cfg"
+
   # Build node
-  bazel build //src:node
+  run "bazel build //src:node $build_cfg"
 
   echo "=============================="
-  rm -rf *.params
-  cp bazel-out/k8-dbg/bin/src/libnode.so-2.params .
-  cp bazel-out/k8-dbg/bin/src/modules/planning/libplanning_module.lo-2.params .
+  # rm -rf *.params
+  # cp bazel-out/k8-dbg/bin/src/libnode.so-2.params .
+  # cp bazel-out/k8-dbg/bin/src/modules/planning/libplanning_module.lo-2.params .
 
   ls -lh bazel-bin/src/libnode.so
-  ldd bazel-bin/src/libnode.so
+  [ $platform = "x86" ] && ldd bazel-bin/src/libnode.so
   # readelf -d bazel-bin/src/libnode.so | grep NEEDED
   echo "=============================="
+
+  # Install
+  rm -rf $install_dir
+  run "bazel run install $build_cfg -- $install_dir"
+
+  # Post build
+  post_build
 }
 
-test() {
+function test() {
   bazel test --test_output=all //src/common/math:vec2d_test
   bazel test --test_output=all //test/...
 }
 
-install() {
-  rm -rf $install_dir
-  bazel run install -- $install_dir
-}
-
-refresh() {
+function refresh() {
   if [ $(command -v bazel-compile-commands) ]; then
     bazel-compile-commands //src/... //proto/... --output $current_script_dir/compile_commands.json
   else
@@ -52,7 +60,7 @@ refresh() {
   fi
 }
 
-format_bazel() {
+function format_bazel() {
   local buildifier_cmd="buildifier"
   [ $(command -v $buildifier_cmd) ] || {
     printf $(
@@ -70,7 +78,7 @@ format_bazel() {
     \) -exec "$buildifier_cmd" {} \;
 }
 
-cmake_build() {
+function cmake_build() {
   rm -rf $current_script_dir/output $current_script_dir/build
   cmake -S $current_script_dir/cmake -B $current_script_dir/build \
     -G Ninja \
@@ -83,14 +91,9 @@ cmake_build() {
   ninja -C build install
 }
 
-bazel_build() {
-  clean
-  build
-  # test
-  install
+function post_build() {
   refresh
   format_bazel
-  # bazel shutdown
 }
 
 case $1 in
@@ -99,17 +102,13 @@ clean)
   bazel clean --expunge
   ;;
 rpi)
-  build_config=(
-    --platforms=//:rpi
-    # --config asan
-  )
-  bazel_build
+  build "rpi"
   ;;
 x86)
-  build_config=(
-    # --config asan
-  )
-  bazel_build
+  build "x86"
+  ;;
+riscv)
+  build "riscv"
   ;;
 coverage)
   bazel coverage \
@@ -119,10 +118,8 @@ coverage)
   genhtml --output genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat"
   ;;
 *)
-  build_config=(
-    # --config asan
-  )
-  bazel_build
+  printf "Usage:\n\t$ bash $0 <x86 | riscv | rpi | clean>\n"
+  exit 1
   ;;
 esac
 

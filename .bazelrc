@@ -1,25 +1,26 @@
 # -----------------------------------------------------------------------------
 # common 配置
 # -----------------------------------------------------------------------------
-common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
-common --enable_platform_specific_config
 common --experimental_downloader_config=bazel_downloader.cfg
+common --enable_bzlmod 
 
 # -----------------------------------------------------------------------------
-# common configuration for bazel build
+# Common build configuration for bazel build
 # -----------------------------------------------------------------------------
 build --show_timestamps
 build --subcommands
-build --spawn_strategy=local
 build --verbose_failures
 build --disk_cache=~/.cache/bazel
 build --force_pic
-# build --features=-default_compiler_flags
 # build --sandbox_debug
 build --config=Debug
 build --copt="-Werror=return-type"
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build --copt="-fdiagnostics-color=always"
+build --copt=-Wall
+build --copt=-Wfatal-errors
+build --copt=-Wno-unused-parameter
+build --copt=-Werror
 
 # -----------------------------------------------------------------------------
 # Build type config
@@ -57,14 +58,15 @@ build:ubsan --copt=-fno-sanitize=nonnull-attribute
 # -----------------------------------------------------------------------------
 # clang 14
 # -----------------------------------------------------------------------------
-build:clang --platforms=//:clang_14_x86_64
-build:clang --copt=-Wall
-build:clang --copt=-Wextra
-build:clang --copt=-Wfatal-errors
-build:clang --copt=-Wno-unused-parameter
-build:clang --copt=-Werror
-# build:clang --noincompatible_enable_cc_toolchain_resolution
-build --config=clang
+build:x86 --platforms=//:clang_14_x86_64
+build:x86 --define=--platform=x86
+
+# -----------------------------------------------------------------------------
+# riscv
+# -----------------------------------------------------------------------------
+build:riscv --platforms=//:riscv
+build:riscv --define=--platform=riscv
+build:riscv --toolchain_resolution_debug='@bazel_tools//tools/cpp:toolchain_type'
 
 # -----------------------------------------------------------------------------
 # 如何使用 Bazel 离线编译

@@ -1,11 +1,31 @@
 cc_library(
     name = "spdlog",
-    srcs = glob([
-        "output/lib/*.so*",
-    ]),
-    hdrs = glob([
-        "output/spdlog/**/*",
-    ]),
-    includes = ["output/include"],
+    srcs = select({
+        "//:riscv_platform": glob([
+            "output_riscv/lib/*.so*",
+        ]),
+        "//:x86_platform": glob([
+            "output_x86/lib/*.so*",
+        ]),
+        "//conditions:default": glob([
+            "output_x86/lib/*.so*",
+        ]),
+    }),
+    hdrs = select({
+        "//:riscv_platform": glob([
+            "output_riscv/include/spdlog/**/*.h",
+        ]),
+        "//:x86_platform": glob([
+            "output_x86/include/spdlog/**/*.h",
+        ]),
+        "//conditions:default": glob([
+            "output_x86/include/spdlog/**/*.h",
+        ]),
+    }),
+    includes = select({
+        "//:riscv_platform": ["output_riscv/include"],
+        "//:x86_platform": ["output_x86/include"],
+        "//conditions:default": ["output_x86/include"],
+    }),
     visibility = ["//visibility:public"],
 )

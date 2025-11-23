@@ -96,3 +96,7 @@ cmake-build-*/
 /.vs
 /out/build
 /CMakeSettings.json
+
+# Build result
+/build/
+/output_*/
