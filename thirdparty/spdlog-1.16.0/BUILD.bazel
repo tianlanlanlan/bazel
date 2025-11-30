@@ -22,6 +22,7 @@ cc_library(
             "output_x86/include/spdlog/**/*.h",
         ]),
     }),
+    defines = ["SPDLOG_COMPILED_LIB"],
     includes = select({
         "//:riscv_platform": ["output_riscv/include"],
         "//:x86_platform": ["output_x86/include"],
