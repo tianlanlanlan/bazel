@@ -41,3 +41,15 @@ cc_test(
     size = "small",
     srcs = ["signal_handler_test.c"],
 )
+
+cc_binary(
+    name = "thread_sanitizer",
+    srcs = ["thread_sanitizer.cc"],
+    copts = [
+        "-fsanitize=thread",
+        "-fno-omit-frame-pointer",
+        "-fPIE",
+        "-pie",
+        "-g",
+    ],
+)
