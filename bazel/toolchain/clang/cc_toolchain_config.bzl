@@ -80,8 +80,7 @@ def _impl(ctx):
         ctx = ctx,
         features = features,  # NEW
         cxx_builtin_include_directories = [
-            # NEW
-            "/usr/lib/llvm-14/lib/clang/14.0.0/include/",
+            "/usr/lib/llvm-15/lib/clang/15.0.7/include",
             "/usr/include",
         ],
         toolchain_identifier = "local",

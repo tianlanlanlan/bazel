@@ -87,3 +87,5 @@ build:riscv --toolchain_resolution_debug='@bazel_tools//tools/cpp:toolchain_type
 # -----------------------------------------------------------------------------
 test --test_verbose_timeout_warnings
 test --test_output=all
+test --build_tests_only=true
+test --config=x86

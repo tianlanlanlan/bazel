@@ -57,6 +57,8 @@ bool PrintSmapsInfo() {
     stats.uss_kb = private_clean + private_dirty;
     stats.pss_kb = pss_value; // PSS已经按比例计算好了[citation:1]
     stats.rss_kb = rss_value; // RSS是实际物理内存[citation:1]
+    (void)shared_clean;
+    (void)shared_dirty;
 
     std::cout << "内存统计 (KB):" << std::endl;
     std::cout << "USS: " << stats.uss_kb << " KB" << std::endl;

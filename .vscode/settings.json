@@ -13,7 +13,7 @@
         "--compile-commands-dir=${workspaceFolder}", // 编译数据库(compile_commands.json 文件)的目录位置
         "--completion-parse=auto", // 当 clangd 准备就绪时，用它来分析建议
         "--completion-style=detailed", // 建议风格：打包(重载函数只会给出一个建议);还可以设置为 detailed
-        "--query-driver=/usr/bin/gcc", // MAC 上需要设定 clang 编译器的路径，也可以是 /usr/local/opt/llvm/bin/clang++
+        "--query-driver=/usr/bin/clang", // MAC 上需要设定 clang 编译器的路径，也可以是 /usr/local/opt/llvm/bin/clang++
         // 启用配置文件(YAML格式)
         "--enable-config",
         "--fallback-style=Webkit", // 默认格式化风格: 在没找到 .clang-format 文件时采用,可用的有 LLVM, Google, Chromium, Mozilla, Webkit, Microsoft, GNU
