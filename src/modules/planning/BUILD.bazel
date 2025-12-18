@@ -19,7 +19,7 @@ pnc_cc_library(
         "//src/framework",
         "//src/framework:registerer",
         "//src/modules/planning/tasks",
-        "//thirdparty/spdlog-1.16.0:spdlog",
+        "//thirdparty:spdlog",
     ],
     alwayslink = True,
 )

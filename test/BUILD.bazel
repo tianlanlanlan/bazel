@@ -12,9 +12,9 @@ cc_test(
     srcs = ["log_test.cc"],
     deps = [
         ":foo",
+        "//thirdparty:spdlog",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-        "//thirdparty/spdlog-1.16.0:spdlog",
     ],
 )
 

@@ -18,7 +18,7 @@ pnc_cc_library(
         "//proto:status_cc_proto",
         "//src/framework",
         "//src/framework:registerer",
-        "//thirdparty/spdlog-1.16.0:spdlog",
+        "//thirdparty:spdlog",
     ],
     alwayslink = True,
 )

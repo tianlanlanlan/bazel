@@ -26,7 +26,7 @@ pnc_cc_library(
         "//src/common/math:vec2d",
         "//src/framework",
         "//src/framework:registerer",
-        "//thirdparty/spdlog-1.16.0:spdlog",
+        "//thirdparty:spdlog",
     ],
     alwayslink = True,
 )
@@ -41,6 +41,6 @@ pnc_cc_library(
     ],
     deps = [
         "//proto:pnc_point_cc_proto",
-        "//thirdparty/spdlog-1.16.0:spdlog",
+        "//thirdparty:spdlog",
     ],
 )

@@ -1,0 +1,60 @@
+cc_library(
+    name = "spdlog",
+    srcs = select({
+        "//:riscv_platform": glob([
+            "spdlog-1.16.0/output_riscv/lib/*.so*",
+        ]),
+        "//:x86_platform": glob([
+            "spdlog-1.16.0/output_x86/lib/*.so*",
+        ]),
+        "//conditions:default": glob([
+            "spdlog-1.16.0/output_x86/lib/*.so*",
+        ]),
+    }),
+    hdrs = select({
+        "//:riscv_platform": glob([
+            "spdlog-1.16.0/output_riscv/include/spdlog/**/*.h",
+        ]),
+        "//:x86_platform": glob([
+            "spdlog-1.16.0/output_x86/include/spdlog/**/*.h",
+        ]),
+        "//conditions:default": glob([
+            "spdlog-1.16.0/output_x86/include/spdlog/**/*.h",
+        ]),
+    }),
+    defines = ["SPDLOG_COMPILED_LIB"],
+    includes = select({
+        "//:riscv_platform": ["spdlog-1.16.0/output_riscv/include"],
+        "//:x86_platform": ["spdlog-1.16.0/output_x86/include"],
+        "//conditions:default": ["spdlog-1.16.0/output_x86/include"],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "tcmalloc",
+    srcs = select({
+        "//:x86_platform": glob([
+            "gperftools-2.17.2/output/lib/libtcmalloc.so*",
+        ]),
+        "//conditions:default": glob([
+            "gperftools-2.17.2/output/lib/*.so*",
+        ]),
+    }),
+    hdrs = select({
+        "//:riscv_platform": glob([
+        ]),
+        "//:x86_platform": glob([
+            "gperftools-2.17.2/output/include/gperftools/**/*.h",
+        ]),
+        "//conditions:default": glob([
+            "gperftools-2.17.2/output/include/gperftools/**/*.h",
+        ]),
+    }),
+    includes = select({
+        "//:riscv_platform": [],
+        "//:x86_platform": ["gperftools-2.17.2/output/include"],
+        "//conditions:default": ["gperftools-2.17.2/output/include"],
+    }),
+    visibility = ["//visibility:public"],
+)

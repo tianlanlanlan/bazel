@@ -19,7 +19,7 @@ cc_library(
     srcs = ["log_pimpl.cc"],
     hdrs = ["log_pimpl.h"],
     deps = [
-        "//thirdparty/spdlog-1.16.0:spdlog",
+        "//thirdparty:spdlog",
     ],
 )
 
