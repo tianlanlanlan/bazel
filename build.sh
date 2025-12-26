@@ -93,7 +93,7 @@ function cmake_build() {
 }
 
 function post_build() {
-  refresh
+  # refresh
   format_bazel
 }
 

@@ -27,3 +27,7 @@
 
 # params
 /*.params
+
+# gperftools
+/*.heap
+/*.pdf

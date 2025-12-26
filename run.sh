@@ -1,13 +1,24 @@
 #!/bin/sh
 set -e
+set -x
 
 run_main() {
   # ldd libnode.so
-  ls -lh bazel-bin/src/libnode.so
-  ldd bazel-bin/src/libnode.so
+
+  local entry_lib=bazel-bin/src/libnode.so
+  ls -lh $entry_lib
+  ldd $entry_lib
+
+  local dep_on_tcmalloc=0
+  if readelf -d "$entry_lib" 2>/dev/null | grep -q "libtcmalloc\.so"; then
+    dep_on_tcmalloc=1
+    local tcmalloc_x86_lib_path=thirdparty/gperftools-2.17.2/output/lib/libtcmalloc.so
+    ENV="env LD_PRELOAD=$tcmalloc_x86_lib_path TCMALLOC_SAMPLE_PARAMETER=524288"
+    rm -f *.heap
+  fi
 
   # Run
-  bazel-bin/src/main "bazel-bin/src/libnode.so" "PlanningModule"
+  $ENV bazel-bin/src/main "$entry_lib" "PlanningModule"
 }
 
 # Run coverage

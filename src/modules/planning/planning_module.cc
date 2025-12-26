@@ -27,16 +27,19 @@ bool PlanningModule::Proc() {
 
     std::vector<int *> ptrs(100, nullptr);
 
-// malloc
-#if 0
+    // malloc
+
+    constexpr int kSize = 1024;
     for (size_t i = 0; i < ptrs.size(); ++i) {
-        // std::cout << "[planning] Allocating 1MB block " << i + 1 << std::endl;
-        ptrs[i] = static_cast<int *>(malloc(1024 * 1024));
+        ptrs[i] = static_cast<int *>(malloc(sizeof(int) * kSize));
+        for (int j = 0; j < kSize; j++) {
+            ptrs[i][j] = j;
+        }
     }
 
+#if 0
     // free part
     for (size_t i = 0; i < ptrs.size(); ++i) {
-        // std::cout << "[planning] Freeing 1MB block " << i + 1 << std::endl;
         free(ptrs[i]);
     }
 #endif
