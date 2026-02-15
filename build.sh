@@ -111,6 +111,9 @@ x86)
 riscv)
   build "riscv"
   ;;
+refresh)
+  bazel run refresh_compile_commands
+  ;;
 coverage)
   bazel coverage \
     --combined_report=lcov \
@@ -119,7 +122,7 @@ coverage)
   genhtml --output genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat"
   ;;
 *)
-  printf "Usage:\n\t$ bash $0 <x86 | riscv | rpi | clean>\n"
+  printf "Usage:\n\t$ bash $0 <x86 | riscv | rpi | refresh | clean>\n"
   exit 1
   ;;
 esac

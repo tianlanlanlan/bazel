@@ -16,3 +16,8 @@ pnc_proto_library(
     name = "pnc_point_proto",
     srcs = ["pnc_point.proto"],
 )
+
+pnc_proto_library(
+    name = "onnx_proto",
+    srcs = ["onnx.proto"],
+)

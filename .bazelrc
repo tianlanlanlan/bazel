@@ -8,7 +8,7 @@ common --enable_bzlmod
 # Common build configuration for bazel build
 # -----------------------------------------------------------------------------
 build --show_timestamps
-build --subcommands
+# build --subcommands
 build --verbose_failures
 build --disk_cache=~/.cache/bazel
 build --force_pic

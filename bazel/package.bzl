@@ -1,5 +1,5 @@
 load("@protobuf//bazel:py_proto_library.bzl", "py_proto_library")
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 INCLUDE_PREFIX = "src/"
 
@@ -15,6 +15,15 @@ def pnc_cc_binary(**kwargs):
     copts = ["-I" + INCLUDE_PREFIX] + kwargs.pop("copts", [])
     cc_binary(**dict(
         kwargs,
+        copts = copts,
+        visibility = ["//visibility:public"],
+    ))
+
+def pnc_cc_test(size = "small", **kwargs):
+    copts = ["-I" + INCLUDE_PREFIX] + kwargs.pop("copts", [])
+    cc_test(**dict(
+        kwargs,
+        size = size,
         copts = copts,
         visibility = ["//visibility:public"],
     ))

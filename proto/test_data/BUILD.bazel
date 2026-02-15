@@ -1,0 +1,23 @@
+load("//bazel:package.bzl", "pnc_cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "driving_vision_onnx",
+    srcs = [
+        "driving_vision.onnx",
+    ]
+)
+
+pnc_cc_test(
+    name = "onnx_test",
+    srcs = [
+        ":onnx_test.cc"
+    ],
+    data = [
+        ":driving_vision_onnx",
+    ],
+    deps = [
+        "//proto:onnx_cc_proto",
+    ]
+)
