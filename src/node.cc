@@ -9,8 +9,10 @@
 #include "framework/component_interface.h"
 
 #include "framework/registerer.h"
+#if defined(ENABLE_GPERFTOOLS)
 #include "gperftools/heap-profiler.h"
 #include "gperftools/malloc_extension.h"
+#endif
 
 // 获取当前时间戳
 std::string get_current_timestamp() {
@@ -39,7 +41,9 @@ bool save_string_to_file(const std::string &content, const std::string &filename
 extern "C" {
 
 void init() {
+#if defined(ENABLE_GPERFTOOLS)
     HeapProfilerStart("node");
+#endif
     std::cout << "[INFO] node init() called" << std::endl;
 
     // apollo::common::math::Vec2d vec(3.0, 4.0);
@@ -59,6 +63,7 @@ void init() {
                 std::cout << "[ERROR] Cannot create: " << component_name << std::endl;
             }
 
+#if defined(ENABLE_GPERFTOOLS)
             // 获取堆样本并保存到文件
             std::string heap_profile;
             MallocExtension::instance()->GetHeapSample(&heap_profile);
@@ -69,6 +74,7 @@ void init() {
             } else {
                 std::cout << "[WARN] Empty heap profile at iteration " << i << std::endl;
             }
+#endif
 
             // 暂停一下
             std::this_thread::sleep_for(std::chrono::milliseconds(100));

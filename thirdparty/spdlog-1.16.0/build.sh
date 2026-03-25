@@ -1,5 +1,6 @@
 #!/bin/bash
-set -ex
+set -e
+# set -x
 
 readonly current_script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
@@ -15,8 +16,10 @@ cmake_build_riscv64() {
     rm -rf $install_dir build
     export CC=/opt/riscv/bin/riscv64-unknown-linux-gnu-gcc
     export CXX=/opt/riscv/bin/riscv64-unknown-linux-gnu-g++
-    cmake -S $current_script_dir -B build -DCMAKE_BUILD_TYPE=Release -DSPDLOG_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$install_dir
-    cmake --build build --target install -- -j$(nproc)
+    if [ -f "$CC" ] && [ -f "$CXX" ];then
+        cmake -S $current_script_dir -B build -DCMAKE_BUILD_TYPE=Release -DSPDLOG_BUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=$install_dir
+        cmake --build build --target install -- -j$(nproc)
+    fi
 }
 
 cmake_build_x86
