@@ -23,6 +23,34 @@ load("@bazel_skylib//lib:shell.bzl", "shell")
 _INSTALLER_GEN_SUFFIX = "_gen"
 _TEMPLATE_TARGET = "@com_github_google_rules_install//installer:installer_template"
 
+def _matches_pattern(text, pattern):
+    """Simple glob pattern matching (supports * wildcard)"""
+    if not pattern:
+        return False
+    parts = pattern.split("*")
+    if len(parts) == 1:
+        return text == pattern
+    if not text.startswith(parts[0]):
+        return False
+    if not text.endswith(parts[-1]):
+        return False
+    idx = len(parts[0])
+    for i in range(1, len(parts) - 1):
+        found = text.find(parts[i], idx)
+        if found == -1:
+            return False
+        idx = found + len(parts[i])
+    return True
+
+def _matches_any_pattern(text, patterns):
+    """Check if text matches any pattern in the list"""
+    if not patterns:
+        return False
+    for pattern in patterns:
+        if _matches_pattern(text, pattern):
+            return True
+    return False
+
 def _install_files_depset(default_info):
     direct = []
     transitive = []
@@ -59,9 +87,11 @@ def _gen_install_binary_impl(ctx):
             if file_path.startswith(external_prefix):
                 file_path = file_path[len(external_prefix):]
 
-            # sources.append(workspace + "/" + file_path)
+            # Skip if matches exclude pattern
+            if ctx.attr.exclude_patterns and _matches_any_pattern(file_path, ctx.attr.exclude_patterns):
+                continue
+
             target = paths.join(ctx.attr.target_subdir, paths.basename(file.short_path))
-            # targets.append(target)
 
             if target not in targets:
                 targets.append(target)
@@ -77,7 +107,6 @@ def _gen_install_binary_impl(ctx):
             "@@INSTALLER_LABEL@@": shell.quote("@{}//{}:{}".format(
                 ctx.workspace_name,
                 ctx.label.package,
-                # Strip leading '_' and suffix form the name.
                 ctx.label.name[1:-len(_INSTALLER_GEN_SUFFIX)],
             )),
             "@@GENERATED_WARNING@@": (
@@ -117,6 +146,7 @@ _gen_installer = rule(
             cfg = _compilation_mode_transition,
         ),
         "executable": attr.bool(default = True),
+        "exclude_patterns": attr.string_list(default = []),
         "target_subdir": attr.string(default = ""),
         "_template": attr.label(
             allow_single_file = True,
@@ -132,7 +162,7 @@ _gen_installer = rule(
     },
 )
 
-def installer(name, data, compilation_mode = "opt", executable = True, target_subdir = ""):
+def installer(name, data, compilation_mode = "opt", executable = True, exclude_patterns = [], target_subdir = ""):
     """Creates an installer
 
     This rule creates an installer for targets in data. Running the installer
@@ -144,6 +174,12 @@ def installer(name, data, compilation_mode = "opt", executable = True, target_su
       compilation_mode: If not empty, sets compilation_mode of targets in data.
       data: Targets to be installed. File names will not be changed.
       executable: If True, the copied files will be set as executable.
+      exclude_patterns: A list of glob patterns to exclude files from installation.
+                        Supports * wildcard. Matches against file path.
+                        Files matching any pattern will be skipped.
+                        Example: ["*spdlog*", "*.a", "*test*"] excludes files
+                        with spdlog in path, all .a files, and files with
+                        "test" in the path.
       target_subdir: Optional subdir under the prefix where the files will be
                      placed.
     """
@@ -153,6 +189,7 @@ def installer(name, data, compilation_mode = "opt", executable = True, target_su
         compilation_mode = compilation_mode,
         data = data,
         executable = executable,
+        exclude_patterns = exclude_patterns,
         target_subdir = target_subdir,
     )
 

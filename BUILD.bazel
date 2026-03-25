@@ -41,6 +41,7 @@ refresh_compile_commands(
 installer(
     name = "install",
     compilation_mode = "",
+    # exclude_patterns = ["*spdlog.so*"],
     data = [
         "//src:main",
         "//src:node",
