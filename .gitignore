@@ -24,6 +24,7 @@
 /thirdparty/spdlog-1.16.0/build/
 /thirdparty/spdlog-1.16.0/output/
 /thirdparty/spdlog-1.16.0/logs/
+/thirdparty/glog-0.7.1/
 
 # params
 /*.params

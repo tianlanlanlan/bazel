@@ -34,6 +34,12 @@ pnc_cc_binary(
 
 # -----------------------------------------------------------------------------
 # node
+# 1. "linkstatic: True" meaning build current libnode.so into shared lib, for source code targets, build it into .a static lib
+#   for pre-built libs, pass it with args '-llibname -L/path/to/lib/dir'.
+#       $CC -shared -o libnode.so libA.a libB.a -lprebuilt-liba -L/path/to/pre-built/lib/dir
+# 2. "linkstatic: False" meaning:
+#       $CC -shared -o libnode.so -lA -L/path/to/dirA/ -lB -L/path/to/dirB/ -lprebuilt-liba -L/path/to/pre-built/lib/dir
+# 3. "linkshared = True" meanning build current target into shared lib not executable binary
 # -----------------------------------------------------------------------------
 pnc_cc_binary(
     name = "node",

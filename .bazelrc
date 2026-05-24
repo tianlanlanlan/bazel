@@ -8,7 +8,7 @@ common --enable_bzlmod
 # Common build configuration for bazel build
 # -----------------------------------------------------------------------------
 build --show_timestamps
-# build --subcommands
+build --subcommands
 build --verbose_failures
 build --disk_cache=~/.cache/bazel
 build --force_pic
@@ -22,7 +22,7 @@ build --copt=-Wfatal-errors
 build --copt=-Wno-unused-parameter
 build --copt=-Werror
 build --copt=-Wno-deprecated-declarations
-build --define=--output_lib_num=multi_lib # one_lib or multi_lib
+build --define=--output_lib_num=one_lib # one_lib or multi_lib
 
 # -----------------------------------------------------------------------------
 # Build type config
