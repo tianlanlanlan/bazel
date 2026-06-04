@@ -8,7 +8,30 @@
 #include <string>
 #include <thread>
 
-int main(int argc, char **argv) {
+void TestExplicitConstructor() {
+    class Foo {
+      private:
+        int foo_;
+
+      public:
+        explicit Foo(int foo) : foo_(foo) {}
+
+        void foo() { std::cout << "foo: " << this->foo_ << std::endl; }
+    };
+
+    auto test_func = [](Foo foo) { foo.foo(); };
+    test_func(Foo(100));
+}
+
+template <typename... Args> void fold_expression_printer(Args &&...args) { (std::cout << ... << args) << '\n'; }
+void TestFoldExpression() {
+    int a = 10;
+    double b = 20.0;
+    std::string c = "hello";
+    fold_expression_printer(a, b, c);
+}
+
+int TestDLOpen(const int argc, char *argv[]) {
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " </path/to/libnode.so> <ComponentName>" << std::endl;
         return 1;
@@ -67,5 +90,15 @@ int main(int argc, char **argv) {
     // 4. 清理资源
     dlclose(handle);
     std::cout << "程序执行完成" << std::endl;
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    TestDLOpen(argc, argv);
+
+    TestExplicitConstructor();
+
+    TestFoldExpression();
+
     return 0;
 }
