@@ -6,4 +6,7 @@ pnc_cc_library(
     name = "mem_info_utils",
     srcs = ["mem_info_utils.cc"],
     hdrs = ["mem_info_utils.h"],
+    deps = [
+        "//src/common/log",
+    ],
 )

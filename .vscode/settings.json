@@ -55,5 +55,8 @@
     "clangd.serverCompletionRanking": true, // 借助网上的信息排序建议
     "clangd.detectExtensionConflicts": true, // 当其它拓展与 clangd 冲突时警告并建议禁用
     "editor.suggest.snippetsPreventQuickSuggestions": false, // clangd的snippets有很多的跳转点，不用这个就必须手动触发Intellisense了
-    "editor.accessibilitySupport": "off", // Close stupid vscode terminal sound
+    "editor.accessibilitySupport": "off",
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "python-envs.pythonProjects": [], // Close stupid vscode terminal sound
 }

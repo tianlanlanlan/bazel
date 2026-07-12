@@ -8,6 +8,7 @@ cc_library(
     hdrs = ["vec2d.h"],
     deps = [
         "//src/common/log",
+        "@fmt",
     ],
 )
 
@@ -94,5 +95,6 @@ pnc_cc_library(
     hdrs = ["vec2d.h"],
     deps = [
         "//src/common/log",
+        "@fmt",
     ],
 )

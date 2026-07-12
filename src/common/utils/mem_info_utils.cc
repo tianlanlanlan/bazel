@@ -4,18 +4,20 @@
 #include <iostream>
 #include <mutex>
 
+#include "common/log/log.h"
+
 bool PrintSmapsInfo() {
     static std::once_flag flag;
     std::call_once(flag, []() {
-        std::cout << "指标说明:" << std::endl;
-        std::cout << "USS - 进程独占内存 (最准确的内存占用)" << std::endl;
-        std::cout << "PSS - 按比例计算的共享内存" << std::endl;
-        std::cout << "RSS - 实际物理内存 (包含共享库)" << std::endl;
+        AINFO << "指标说明:";
+        AINFO << "USS - 进程独占内存 (最准确的内存占用)";
+        AINFO << "PSS - 按比例计算的共享内存";
+        AINFO << "RSS - 实际物理内存 (包含共享库)";
     });
 
     std::ifstream file("/proc/self/smaps");
     if (!file.is_open()) {
-        std::cerr << "无法打开 /proc/self/smaps" << std::endl;
+        AERROR << "无法打开 /proc/self/smaps";
         return false;
     }
 
@@ -60,10 +62,10 @@ bool PrintSmapsInfo() {
     (void)shared_clean;
     (void)shared_dirty;
 
-    std::cout << "内存统计 (KB):" << std::endl;
-    std::cout << "USS: " << stats.uss_kb << " KB" << std::endl;
-    std::cout << "PSS: " << stats.pss_kb << " KB" << std::endl;
-    std::cout << "RSS: " << stats.rss_kb << " KB" << std::endl;
+    AINFO << "内存统计 (KB):";
+    AINFO << "USS: " << stats.uss_kb << " KB";
+    AINFO << "PSS: " << stats.pss_kb << " KB";
+    AINFO << "RSS: " << stats.rss_kb << " KB";
 
     return true;
 }

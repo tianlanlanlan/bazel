@@ -6,6 +6,7 @@
 #include <sstream>
 #include <thread>
 
+#include "common/log/log.h"
 #include "framework/component_interface.h"
 
 #include "framework/registerer.h"
@@ -28,13 +29,13 @@ std::string get_current_timestamp() {
 bool save_string_to_file(const std::string &content, const std::string &filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "[ERROR] Failed to open file: " << filename << std::endl;
+        AERROR << "Failed to open file: " << filename;
         return false;
     }
 
     file << content;
     file.close();
-    std::cout << "[INFO] Saved to file: " << filename << " (" << content.size() << " bytes)" << std::endl;
+    AINFO << "Saved to file: " << filename << " (" << content.size() << " bytes)";
     return true;
 }
 
@@ -44,7 +45,7 @@ void init() {
 #if defined(ENABLE_GPERFTOOLS)
     HeapProfilerStart("node");
 #endif
-    std::cout << "[INFO] node init() called" << std::endl;
+    AINFO << "node init() called";
 
     // apollo::common::math::Vec2d vec(3.0, 4.0);
     // std::cout << "Vec2d length: " << vec.Length() << std::endl;
@@ -60,7 +61,7 @@ void init() {
                 ptr->Init();
                 ptr->Proc();
             } else {
-                std::cout << "[ERROR] Cannot create: " << component_name << std::endl;
+                AERROR << "Cannot create: " << component_name;
             }
 
 #if defined(ENABLE_GPERFTOOLS)
@@ -72,7 +73,7 @@ void init() {
                 std::string filename = base_filename + "_" + std::to_string(i) + ".txt";
                 save_string_to_file(heap_profile, filename);
             } else {
-                std::cout << "[WARN] Empty heap profile at iteration " << i << std::endl;
+                AWARN << "Empty heap profile at iteration " << i;
             }
 #endif
 
@@ -88,7 +89,7 @@ void init() {
             ptr->Init();
             ptr->Proc();
         } else {
-            std::cout << "[ERROR] Cannot create: " << component_name << std::endl;
+            AERROR << "Cannot create: " << component_name;
         }
     });
 

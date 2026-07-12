@@ -14,6 +14,7 @@ pnc_cc_library(
         "common/common.h",
     ],
     deps = [
+        "//src/common/log",
         "//src/common/math",
     ],
 )
@@ -26,6 +27,7 @@ pnc_cc_binary(
     srcs = ["main.cc"],
     linkopts = ["-ldl"],
     deps = [
+        "//src/common/log",
         "//src/common/utils:mem_info_utils",
         "//src/framework",
         "//src/framework:registerer",
@@ -54,7 +56,7 @@ pnc_cc_binary(
         "//conditions:default": True,
     }),
     deps = [
-        # "//src:common",
+        "//src/common/log",
         "//src/modules",
         "//src/framework",
         "//thirdparty:tcmalloc",

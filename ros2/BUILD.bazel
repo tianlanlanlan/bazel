@@ -1,0 +1,59 @@
+load("//bazel:package.bzl", "pnc_cc_binary", "pnc_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ROS2_RPATH = "-Wl,-rpath,/home/tianlan/workspace/bazel/thirdparty/ros2_jazzy/ros2-linux/lib"
+ROS2_LIB = "/home/tianlan/workspace/bazel/thirdparty/ros2_jazzy/ros2-linux/lib"
+
+# OCCNode
+pnc_cc_library(
+    name = "occ_node",
+    srcs = ["occ_node.cc"],
+    hdrs = ["occ_node.h"],
+    deps = [
+        "@ros2//:rclcpp",
+    ],
+)
+
+# OdNode
+pnc_cc_library(
+    name = "od_node",
+    srcs = ["od_node.cc"],
+    hdrs = ["od_node.h"],
+    deps = [
+        "@ros2//:rclcpp",
+    ],
+)
+
+# SparseOneModelNode
+pnc_cc_library(
+    name = "sparse_one_model_node",
+    srcs = ["sparse_one_model_node.cc"],
+    hdrs = ["sparse_one_model_node.h"],
+    deps = [
+        "@ros2//:rclcpp",
+    ],
+)
+
+# ros2 main (from main.cc)
+pnc_cc_binary(
+    name = "main",
+    srcs = ["main.cc"],
+    linkopts = [ROS2_RPATH],
+    deps = [
+        ":occ_node",
+        ":od_node",
+        ":sparse_one_model_node",
+        "@ros2//:rclcpp",
+    ],
+)
+
+# ros2 example (from example.cc) — MultiThreadedExecutor demo
+pnc_cc_binary(
+    name = "example",
+    srcs = ["example.cc"],
+    linkopts = [ROS2_RPATH],
+    deps = [
+        "@ros2//:rclcpp",
+    ],
+)

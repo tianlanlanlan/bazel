@@ -16,11 +16,14 @@
 
 #pragma once
 
-#include <cstdarg>
-#include <string>
+#include <sstream>
+#include <cstdlib>
 
-#include "glog/logging.h"
-#include "glog/raw_logging.h"
+#include <spdlog/spdlog.h>
+
+// Keep glog CHECK macros (CHECK_GT, CHECK_GE, CHECK_NOTNULL, etc.)
+// throughout the codebase.  Logging itself uses spdlog (see AINFO etc. below).
+#include <glog/logging.h>
 
 #define LEFT_BRACKET "["
 #define RIGHT_BRACKET "]"
@@ -29,110 +32,139 @@
 #define MODULE_NAME "pnc"
 #endif
 
-#define ADEBUG_MODULE(module) VLOG(4) << LEFT_BRACKET << module << RIGHT_BRACKET << "[DEBUG] "
-#define ADEBUG ADEBUG_MODULE(MODULE_NAME)
-#define AINFO ALOG_MODULE(MODULE_NAME, INFO)
-#define AWARN ALOG_MODULE(MODULE_NAME, WARN)
-#define AERROR ALOG_MODULE(MODULE_NAME, ERROR)
-#define AFATAL ALOG_MODULE(MODULE_NAME, FATAL)
+namespace apollo {
+namespace log {
 
-#ifndef ALOG_MODULE_STREAM
-#define ALOG_MODULE_STREAM(log_severity) ALOG_MODULE_STREAM_##log_severity
-#endif
+// Stream-style log helper that captures source location and logs via spdlog.
+class LogStream {
+public:
+    LogStream(const char* file, int line, spdlog::level::level_enum level)
+        : file_(file), line_(line), level_(level) {}
 
-#ifndef ALOG_MODULE
-#define ALOG_MODULE(module, log_severity) ALOG_MODULE_STREAM(log_severity)(module)
-#endif
+    ~LogStream() {
+        if (auto logger = spdlog::default_logger_raw()) {
+            logger->log(
+                spdlog::source_loc{file_, line_, nullptr},
+                level_, buf_.str());
+        }
+    }
 
-#define ALOG_MODULE_STREAM_INFO(module)                                                                                \
-    google::LogMessage(__FILE__, __LINE__, google::INFO).stream() << LEFT_BRACKET << module << RIGHT_BRACKET
+    LogStream(const LogStream&) = delete;
+    LogStream& operator=(const LogStream&) = delete;
 
-#define ALOG_MODULE_STREAM_WARN(module)                                                                                \
-    google::LogMessage(__FILE__, __LINE__, google::WARNING).stream() << LEFT_BRACKET << module << RIGHT_BRACKET
+    template <typename T>
+    LogStream& operator<<(const T& v) {
+        buf_ << v;
+        return *this;
+    }
 
-#define ALOG_MODULE_STREAM_ERROR(module)                                                                               \
-    google::LogMessage(__FILE__, __LINE__, google::ERROR).stream() << LEFT_BRACKET << module << RIGHT_BRACKET
+    LogStream& operator<<(std::ostream& (*manip)(std::ostream&)) {
+        manip(buf_);
+        return *this;
+    }
 
-#define ALOG_MODULE_STREAM_FATAL(module)                                                                               \
-    google::LogMessage(__FILE__, __LINE__, google::FATAL).stream() << LEFT_BRACKET << module << RIGHT_BRACKET
+private:
+    std::ostringstream buf_;
+    const char* file_;
+    int line_;
+    spdlog::level::level_enum level_;
+};
 
-#define AINFO_IF(cond) ALOG_IF(INFO, cond, MODULE_NAME)
-#define AWARN_IF(cond) ALOG_IF(WARN, cond, MODULE_NAME)
-#define AERROR_IF(cond) ALOG_IF(ERROR, cond, MODULE_NAME)
-#define AFATAL_IF(cond) ALOG_IF(FATAL, cond, MODULE_NAME)
-#define ALOG_IF(severity, cond, module) !(cond) ? (void)0 : google::LogMessageVoidify() & ALOG_MODULE(module, severity)
+}  // namespace log
+}  // namespace apollo
 
-#define ACHECK(cond) CHECK(cond) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
+// ──────────────────────────────────────────────────────────────────────────────
+//  Logging macros — file and line are captured at the call site
+// ──────────────────────────────────────────────────────────────────────────────
 
-#define AINFO_EVERY(freq) LOG_EVERY_N(INFO, freq) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
-#define AWARN_EVERY(freq) LOG_EVERY_N(WARNING, freq) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
-#define AERROR_EVERY(freq) LOG_EVERY_N(ERROR, freq) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
+#define ADEBUG_MODULE(module) \
+    apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::debug)
+#define ADEBUG  ADEBUG_MODULE(MODULE_NAME)
+#define AINFO   apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::info)
+#define AWARN   apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::warn)
+#define AERROR  apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::err)
+#define AFATAL  apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::critical)
+
+// ──────────────────────────────────────────────────────────────────────────────
+//  Conditional logging
+// ──────────────────────────────────────────────────────────────────────────────
+
+#define AINFO_IF(cond)  ALOG_IF(INFO, cond)
+#define AWARN_IF(cond)  ALOG_IF(WARN, cond)
+#define AERROR_IF(cond) ALOG_IF(ERROR, cond)
+#define AFATAL_IF(cond) ALOG_IF(FATAL, cond)
+
+#define ALOG_IF(severity, cond)                                              \
+    !(cond) ? (void)0                                                        \
+            : apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::severity)
+
+// ──────────────────────────────────────────────────────────────────────────────
+//  CHECK – logs a failure then aborts
+// ──────────────────────────────────────────────────────────────────────────────
+
+#define ACHECK(cond)                                                         \
+    if (!(cond)) {                                                           \
+        apollo::log::LogStream(__FILE__, __LINE__, spdlog::level::critical)  \
+            << "ACHECK failed: " #cond;                                      \
+        std::abort();                                                        \
+    }
+
+// ──────────────────────────────────────────────────────────────────────────────
+//  Convenience guards
+// ──────────────────────────────────────────────────────────────────────────────
 
 #if !defined(RETURN_IF_NULL)
-#define RETURN_IF_NULL(ptr)                                                                                            \
-    if (ptr == nullptr) {                                                                                              \
-        AWARN << #ptr << " is nullptr.";                                                                               \
-        return;                                                                                                        \
+#define RETURN_IF_NULL(ptr)                                                  \
+    if (ptr == nullptr) {                                                    \
+        AWARN << #ptr << " is nullptr.";                                     \
+        return;                                                              \
     }
 #endif
 
 #if !defined(RETURN_VAL_IF_NULL)
-#define RETURN_VAL_IF_NULL(ptr, val)                                                                                   \
-    if (ptr == nullptr) {                                                                                              \
-        AWARN << #ptr << " is nullptr.";                                                                               \
-        return val;                                                                                                    \
+#define RETURN_VAL_IF_NULL(ptr, val)                                         \
+    if (ptr == nullptr) {                                                    \
+        AWARN << #ptr << " is nullptr.";                                     \
+        return val;                                                          \
     }
 #endif
 
 #if !defined(RETURN_IF)
-#define RETURN_IF(condition)                                                                                           \
-    if (condition) {                                                                                                   \
-        AWARN << #condition << " is met.";                                                                             \
-        return;                                                                                                        \
+#define RETURN_IF(condition)                                                 \
+    if (condition) {                                                         \
+        AWARN << #condition << " is met.";                                   \
+        return;                                                              \
     }
 #endif
 
 #if !defined(RETURN_VAL_IF)
-#define RETURN_VAL_IF(condition, val)                                                                                  \
-    if (condition) {                                                                                                   \
-        AWARN << #condition << " is met.";                                                                             \
-        return val;                                                                                                    \
+#define RETURN_VAL_IF(condition, val)                                        \
+    if (condition) {                                                         \
+        AWARN << #condition << " is met.";                                   \
+        return val;                                                          \
     }
 #endif
 
 #if !defined(_RETURN_VAL_IF_NULL2__)
 #define _RETURN_VAL_IF_NULL2__
-#define RETURN_VAL_IF_NULL2(ptr, val)                                                                                  \
-    if (ptr == nullptr) {                                                                                              \
-        return (val);                                                                                                  \
+#define RETURN_VAL_IF_NULL2(ptr, val)                                        \
+    if (ptr == nullptr) {                                                    \
+        return (val);                                                        \
     }
 #endif
 
 #if !defined(_RETURN_VAL_IF2__)
 #define _RETURN_VAL_IF2__
-#define RETURN_VAL_IF2(condition, val)                                                                                 \
-    if (condition) {                                                                                                   \
-        return (val);                                                                                                  \
+#define RETURN_VAL_IF2(condition, val)                                       \
+    if (condition) {                                                         \
+        return (val);                                                        \
     }
 #endif
 
 #if !defined(_RETURN_IF2__)
 #define _RETURN_IF2__
-#define RETURN_IF2(condition)                                                                                          \
-    if (condition) {                                                                                                   \
-        return;                                                                                                        \
+#define RETURN_IF2(condition)                                                \
+    if (condition) {                                                         \
+        return;                                                              \
     }
-#endif
-
-#if 0
-#include "src/common/log/log_pimpl.h"
-
-// 定义PNC组件的日志器
-DEFINE_COMPONENT_LOGGER(PNC)
-#define PNC_LOG_TRACE(...) LogWrapperPNC::GetInstance().Log(LogLevel::TRACE, __VA_ARGS__)
-#define PNC_LOG_DEBUG(...) LogWrapperPNC::GetInstance().Log(LogLevel::DEBUG, __VA_ARGS__)
-#define PNC_LOG_INFO(...) LogWrapperPNC::GetInstance().Log(LogLevel::INFO, __VA_ARGS__)
-#define PNC_LOG_WARN(...) LogWrapperPNC::GetInstance().Log(LogLevel::WARN, __VA_ARGS__)
-#define PNC_LOG_ERROR(...) LogWrapperPNC::GetInstance().Log(LogLevel::ERROR, __VA_ARGS__)
-#define PNC_LOG_CRITICAL(...) LogWrapperPNC::GetInstance().Log(LogLevel::CRITICAL, __VA_ARGS__)
 #endif

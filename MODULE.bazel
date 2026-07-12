@@ -55,6 +55,15 @@ cc_library(
 """,
 )
 
+# ROS2 Jazzy pre-built installation
+# Downloaded from https://github.com/ros2/ros2/releases
+# Extracted to thirdparty/ros2_jazzy/ros2-linux/
+new_local_repository(
+    name = "ros2",
+    path = "thirdparty/ros2_jazzy/ros2-linux",
+    build_file = "//bazel/rules:ros2.BUILD",
+)
+
 # -----------------------------------------------------------------------------
 # Register toolchains
 # -----------------------------------------------------------------------------

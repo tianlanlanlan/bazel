@@ -1,3 +1,4 @@
+#include "common/log/log.h"
 #include "common/utils/mem_info_utils.h"
 #include "framework/component_interface.h"
 #include "framework/registerer.h"
@@ -16,14 +17,14 @@ void TestExplicitConstructor() {
       public:
         explicit Foo(int foo) : foo_(foo) {}
 
-        void foo() { std::cout << "foo: " << this->foo_ << std::endl; }
+        void foo() { AINFO << "foo: " << this->foo_; }
     };
 
     auto test_func = [](Foo foo) { foo.foo(); };
     test_func(Foo(100));
 }
 
-template <typename... Args> void fold_expression_printer(Args &&...args) { (std::cout << ... << args) << '\n'; }
+template <typename... Args> void fold_expression_printer(Args &&...args) { (AINFO << ... << args); }
 void TestFoldExpression() {
     int a = 10;
     double b = 20.0;
@@ -33,7 +34,7 @@ void TestFoldExpression() {
 
 int TestDLOpen(const int argc, char *argv[]) {
     if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " </path/to/libnode.so> <ComponentName>" << std::endl;
+        AERROR << "Usage: " << argv[0] << " </path/to/libnode.so> <ComponentName>";
         return 1;
     }
 
@@ -43,11 +44,11 @@ int TestDLOpen(const int argc, char *argv[]) {
     char *component_name = argv[2];
 
     // 1. 加载动态库
-    std::cout << "[INFO] Start loading library: " << shared_lib_path << std::endl;
+    AINFO << "Start loading library: " << shared_lib_path;
     void *handle = dlopen(shared_lib_path, RTLD_LAZY | RTLD_GLOBAL);
 
     if (!handle) {
-        std::cerr << "[ERROR] 无法加载库: " << shared_lib_path << "\n错误: " << dlerror() << std::endl;
+        AERROR << "无法加载库: " << shared_lib_path << "\n错误: " << dlerror();
         return 1;
     }
 
@@ -57,7 +58,7 @@ int TestDLOpen(const int argc, char *argv[]) {
 
     const char *dlsym_error = dlerror();
     if (dlsym_error) {
-        std::cerr << "[ERROR] 无法找到 init 函数: " << dlsym_error << std::endl;
+        AERROR << "无法找到 init 函数: " << dlsym_error;
         dlclose(handle);
         return 1;
     }
@@ -69,9 +70,14 @@ int TestDLOpen(const int argc, char *argv[]) {
     std::unique_ptr<ComponentInterface> ptr = factory::Registry<ComponentInterface>::New(component_name);
     if (ptr != nullptr) {
         ptr->Init();
-        ptr->Proc();
+
+        AINFO << "Run ComponentInterface";
+        int count = 100 * 100;
+        while (count--) {
+            ptr->Proc();
+        }
     } else {
-        std::cout << "[ERROR] Cannot create: '" << component_name << "' with dlopen" << std::endl;
+        AERROR << "Cannot create: '" << component_name << "' with dlopen";
     }
 
 #if 0
@@ -89,7 +95,7 @@ int TestDLOpen(const int argc, char *argv[]) {
 
     // 4. 清理资源
     dlclose(handle);
-    std::cout << "程序执行完成" << std::endl;
+    AINFO << "程序执行完成";
     return 0;
 }
 

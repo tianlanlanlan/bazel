@@ -8,10 +8,10 @@ cc_library(
     hdrs = ["log.h"],
     strip_include_prefix = "/src",
     deps = [
-        # ":log_pimpl",
-        "@fmt",
+        "//thirdparty:spdlog",
         "@glog",
     ],
+    alwayslink = True,
 )
 
 cc_library(

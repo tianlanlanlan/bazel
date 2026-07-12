@@ -28,6 +28,7 @@ refresh_compile_commands(
         "//proto/...": "--config=x86",
         "//src/...": "--config=x86",
         "//test/...": "--config=x86",
+        "//ros2/...": "--config=x86",
     },
 
     # No need to add flags already in .bazelrc. They're automatically picked up.

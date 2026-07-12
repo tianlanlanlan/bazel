@@ -25,6 +25,8 @@
 /thirdparty/spdlog-1.16.0/output/
 /thirdparty/spdlog-1.16.0/logs/
 /thirdparty/glog-0.7.1/
+/thirdparty/ros2_jazzy/
+/thirdparty/*.bz2
 
 # params
 /*.params
@@ -32,3 +34,7 @@
 # gperftools
 /*.heap
 /*.pdf
+
+/logs
+
+/.cache/

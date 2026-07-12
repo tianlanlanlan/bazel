@@ -15,11 +15,11 @@ pnc_cc_library(
     ],
     deps = [
         "//proto:perf_info_cc_proto",
+        "//src/common/log",
         "//src/common/math:vec2d",
         "//src/framework",
         "//src/framework:registerer",
         "//src/modules/planning/tasks",
-        "//thirdparty:spdlog",
     ],
     alwayslink = True,
 )
